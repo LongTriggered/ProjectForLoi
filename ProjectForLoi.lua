@@ -1,6 +1,5 @@
 
- DiscordWebhookUrl =
-   "https://discord.com/api/webhooks/1328437666416562280/IFvig8H4Ll47jk2V_nHcEqZcpcnQe9c5DMhHx_TnTg3kW4sNU7kdUwnGbIUNH6Kregg5"
+ DiscordWebhookUrl = "https://discord.com/api/webhooks/1328437666416562280/IFvig8H4Ll47jk2V_nHcEqZcpcnQe9c5DMhHx_TnTg3kW4sNU7kdUwnGbIUNH6Kregg5"
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 Name = game.Players.LocalPlayer.Name
 Level = game.Players.LocalPlayer.Data.Level.Value
@@ -12,45 +11,45 @@ Beli = game.Players.LocalPlayer.Data.Beli.Value
 
 -- Get Fruit Data
 pcall(function()
-local FruitTable = {}
-local args = {
-    [1] = "GetFruits",
-    [2] = false
-}
-game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-
-game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
-game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
-
-    Fruit = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-    for i,v in pairs(Fruit) do
-        for a,b in pairs(v) do
-               if a == "Name" then
-            table.insert(FruitTable,b)
-                end
-        end
-    end
- ---get Fruit in Inventory
+    FruitTable = {}
+    PlayerFruitTable = {}
     local args = {
-        [1] = "getInventory"
+        [1] = "GetFruits",
+        [2] = false
     }
-        game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
-        game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
     
-       local Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-       for i,v in pairs(Inventory) do
-            if table.find(FruitTable,v.Name) then
-                print("Ten :",v.Name)
-                for i1,v1 in pairs(v) do
-                    if i1 == "Count" then
-                        print("So luong: ",v1)
+    game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
+    game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
+    
+        Fruit = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+        for i,v in pairs(Fruit) do
+            for a,b in pairs(v) do
+                   if a == "Name" then
+                table.insert(FruitTable,b)
+                    end
+            end
+        end
+     ---get Fruit in Inventory
+        local args = {
+            [1] = "getInventory"
+        }
+            game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
+            game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
+        
+           local Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+           for i,v in pairs(Inventory) do
+                if table.find(FruitTable,v.Name) then
+                    for i1,v1 in pairs(v) do
+                        if i1 == "Count" then
+                            table.insert(PlayerFruitTable,v.Name.." ["..v1.."]")
+                        end
                     end
                 end
-            end
-       end
-end)
+           end
+    end)
 -- webhook func
-function SendWebHook()
+function SendWebHook1()
 
 local data = {
 
@@ -102,4 +101,71 @@ local abcdef = {Url = DiscordWebhookUrl, Body = newdata, Method = "POST", Header
 request(abcdef)
 end
     ---
-SendWebHook()
+SendWebHook1()
+
+function sendwebhook2(msg)
+    Content = '';
+    Embed = {
+        title = msg;
+        color = tonumber(0xFF0000);
+        description = " ";
+    };
+    (syn and syn.request or http_request) {
+        Url = "https://discord.com/api/webhooks/1328437666416562280/IFvig8H4Ll47jk2V_nHcEqZcpcnQe9c5DMhHx_TnTg3kW4sNU7kdUwnGbIUNH6Kregg5";
+        Method = 'POST';
+        Headers = {
+            ['Content-Type'] = 'application/json';
+        };
+        Body = game:GetService'HttpService':JSONEncode( { content = Content; embeds = { Embed } } );
+    };
+    end
+    
+    local totalElements = #PlayerFruitTable
+    local partSize = math.ceil(totalElements / 3)  -- Chia tổng số phần tử cho 3 và làm tròn lên
+    
+    -- Chia bảng thành 3 phần
+    local firstPart = {}
+    local secondPart = {}
+    local thirdPart = {}
+    
+    -- Phần đầu tiên
+    for i = 1, partSize do
+        table.insert(firstPart, PlayerFruitTable[i])
+    end
+    
+    -- Phần thứ hai
+    for i = partSize + 1, 2 * partSize do
+        if PlayerFruitTable[i] then
+            table.insert(secondPart, PlayerFruitTable[i])
+        end
+    end
+    
+    -- Phần thứ ba
+    for i = 2 * partSize + 1, totalElements do
+        if PlayerFruitTable[i] then
+            table.insert(thirdPart, PlayerFruitTable[i])
+        end
+    end
+    
+    local PlayerFruitList1 = "Fruit Inventory:\n"
+        for _, player in ipairs(firstPart) do
+            PlayerFruitList1 = PlayerFruitList1 ..  player .. "\n"
+        end
+    
+    local PlayerFruitList2 = "Fruit Inventory:\n"
+        for _, player in ipairs(secondPart) do
+            PlayerFruitList2 = PlayerFruitList2 ..  player .. "\n"
+        end
+    
+    local PlayerFruitList3 = "Fruit Inventory:\n"
+        for _, player in ipairs(thirdPart) do
+            PlayerFruitList3 = PlayerFruitList3 ..  player .. "\n"
+        end
+    
+       print(PlayerFruitList1)
+       print(PlayerFruitList2)
+       print(PlayerFruitList3)
+    
+    sendwebhook2(PlayerFruitList1)
+    sendwebhook2(PlayerFruitList2)
+    sendwebhook2(PlayerFruitList3)
