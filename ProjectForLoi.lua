@@ -1,6 +1,14 @@
 
-
+ DiscordWebhookUrl =
+   "https://discord.com/api/webhooks/1328437666416562280/IFvig8H4Ll47jk2V_nHcEqZcpcnQe9c5DMhHx_TnTg3kW4sNU7kdUwnGbIUNH6Kregg5"
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
+Name = game.Players.LocalPlayer.Name
+Level = game.Players.LocalPlayer.Data.Level.Value
+Bounty = game.Players.LocalPlayer.leaderstats['Bounty/Honor'].Value
+DevilFruit = game.Players.LocalPlayer.Data.DevilFruit.Value
+Race =game.Players.LocalPlayer.Data.Race.Value
+Fragments = game.Players.LocalPlayer.Data.Fragments.Value
+Beli = game.Players.LocalPlayer.Data.Beli.Value
 
 -- Get Fruit Data
 pcall(function()
@@ -42,16 +50,7 @@ game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
        end
 end)
 -- webhook func
-Name = game.Players.LocalPlayer.Name
-Level = game.Players.LocalPlayer.Data.Level.Value
-Bounty = game.Players.LocalPlayer.leaderstats['Bounty/Honor'].Value
-DevilFruit = game.Players.LocalPlayer.Data.DevilFruit.Value
-Race =game.Players.LocalPlayer.Data.Race.Value
-Fragments = game.Players.LocalPlayer.Data.Fragments.Value
-Beli = game.Players.LocalPlayer.Data.Beli.Value
-
- DiscordWebhookUrl =
-   "https://discord.com/api/webhooks/1328437666416562280/IFvig8H4Ll47jk2V_nHcEqZcpcnQe9c5DMhHx_TnTg3kW4sNU7kdUwnGbIUNH6Kregg5"
+function SendWebHook()
 
 local data = {
 
@@ -101,4 +100,5 @@ request = http_request or request or HttpPost or syn.request
 local abcdef = {Url = DiscordWebhookUrl, Body = newdata, Method = "POST", Headers = headers}
 
 request(abcdef)
+end
     ---
