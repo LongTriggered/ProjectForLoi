@@ -102,3 +102,4 @@ local abcdef = {Url = DiscordWebhookUrl, Body = newdata, Method = "POST", Header
 request(abcdef)
 end
     ---
+SendWebHook()
