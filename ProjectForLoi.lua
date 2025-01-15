@@ -288,7 +288,7 @@ function sendwebhook2(msg)
         end
     end
     end
-    local Name = game.Players.LocalPlayer.Name.."_Data" .. ".json"
+    Name = game.Players.LocalPlayer.Name.."_Data" .. ".json"
     writefile(Name, game:service'HttpService':JSONEncode(PrintTable))
     [[
     local set
