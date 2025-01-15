@@ -8,6 +8,7 @@ DevilFruit = game.Players.LocalPlayer.Data.DevilFruit.Value
 Race =game.Players.LocalPlayer.Data.Race.Value
 Fragments = game.Players.LocalPlayer.Data.Fragments.Value
 Beli = game.Players.LocalPlayer.Data.Beli.Value
+Valor = game.Players.LocalPlayer.Data.Valor.Value
 
 -- Get Fruit Data
 pcall(function()
@@ -63,11 +64,15 @@ local data = {
 
            ["title"] = 'Player Data Collected! '..tostring(os.date("[%X]")),
 
-           ["description"] = "__Player Info:__".."**\nName:  **"..Name.."\n **Level:  **"..Level.."\n**Bounty: **"..Bounty.."\n**Current Fruit:  **"..DevilFruit.."\n**Race:  **"..Race.."\n**Fragments:  **"..Fragments.."\n**Beli:  **"..Beli,
+           ["description"] = "__Player Info:__".."**\nName:  **"..Name.."\n **Level:  **"..Level.."\n**Bounty: **"..Bounty.."\n**Current Fruit:  **"..DevilFruit.."\n**Race:  **"..Race.."\n**Fragments:  **"..Fragments.."\n**Beli:  **"..Beli.."\n**Valor Level:  **"..Valor,
 
            ["type"] = "rich",
 
            ["color"] = tonumber(0x7269da),
+
+           ["thumbnail"] = {
+                ["url"] = "https://i.imgur.com/LOkRYqi.png"
+           },
 
            ["footer"] = {
                 ["text"] = "Date: "..tostring(os.date("%d/%m/%Y"))
