@@ -20,7 +20,7 @@ PlayerCurrentFruitLevel = ""
 
 PlayerCurrentGun = ""
 PlayerCurrentGunLevel = ""
-
+pcall(function()
 for i ,v in pairs(game:GetService('Players').LocalPlayer.Backpack:GetChildren()) do
     if v:IsA("Tool") then
         if v.ToolTip == "Melee" then
@@ -55,7 +55,7 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
         end
     end
 end
-
+end)
 
 -- Get Fruit Data
 pcall(function()
