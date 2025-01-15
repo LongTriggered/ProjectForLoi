@@ -56,7 +56,7 @@ local data = {
 
    ["content"] = "",
    
-   ["avatar_url"] = "https://i.imgur.com/LOkRYqi.png",
+   ["avatar_url"] = "https://i.imgur.com/OBqZkBq.png",
 
    ["embeds"] = {
 
