@@ -275,6 +275,7 @@ function sendwebhook2(msg)
                     end
                end
         end)
+        pcall(function()
         PrintTable = "Player Name: "..Name..",".."Level: "..Level..",".."Bounty: "..Bounty..",".."Race: "..Race..",".."Fragments: "..Fragments..",".."Beli: "..Beli..",".."Valor Level: "..Valor..",".."Melee: "..PlayerCurrentMelee..",".."Mastery: "..PlayerCurrentMeleeLevel..",".."Blox Fruit: "..PlayerCurrentFruit..",".."Mastery: "..PlayerCurrentFruitLevel..",".."Sword: "..PlayerCurrentSword..",".."Mastery: "..PlayerCurrentSwordLevel..",".."Gun: "..PlayerCurrentGun..",".."Mastery: "..PlayerCurrentGunLevel.."|"
         for i,v in pairs(TestTable2) do
             PrintTable = PrintTable.."Fruit Name: "..v.Name.." , "
@@ -288,6 +289,7 @@ function sendwebhook2(msg)
         end
     end
     end
+end)
     local Name = game.Players.LocalPlayer.Name.."_Data" .. ".json"
     writefile(Name, game:service'HttpService':JSONEncode(PrintTable))
     [[
