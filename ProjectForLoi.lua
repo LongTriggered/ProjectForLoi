@@ -300,8 +300,6 @@ function sendwebhook2(msg)
     ]]
     ---
 -- URL webhook Discord
-local webhookUrl = "https://discord.com/api/webhooks/1329054396897824821/4B8BPIHT7sTJNn5AV9oCoDsGaFxPvhIuDN5wv_AQrufKQQ__4jlHCVvLUb6jBNh2hxFE" -- Thay thế bằng URL webhook của bạn
-
 -- Đọc nội dung tệp JSON
 local fileData = readfile(fileName)
 
@@ -322,7 +320,7 @@ local headers = {
 local requestFunction = http_request or request or HttpPost or syn.request
 if requestFunction then
     local response = requestFunction({
-        Url = webhookUrl,
+        Url = DiscordWebhookUrl,
         Method = "POST",
         Headers = headers,
         Body = body,
