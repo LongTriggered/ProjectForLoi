@@ -1,5 +1,4 @@
 
- DiscordWebhookUrl = "nhap discord webhook url"
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 Name = game.Players.LocalPlayer.Name
 Level = game.Players.LocalPlayer.Data.Level.Value
