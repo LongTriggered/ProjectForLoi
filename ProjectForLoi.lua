@@ -1,6 +1,5 @@
 
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
-pcall(function()
 Name = game:GetService('Players').LocalPlayer.Name
 Level = game:GetService('Players').LocalPlayer.Data.Level.Value
 Bounty = game:GetService('Players').LocalPlayer.leaderstats['Bounty/Honor'].Value
@@ -21,7 +20,7 @@ PlayerCurrentFruitLevel = ""
 
 PlayerCurrentGun = ""
 PlayerCurrentGunLevel = ""
-pcall(function()
+
 for i ,v in pairs(game:GetService('Players').LocalPlayer.Backpack:GetChildren()) do
     if v:IsA("Tool") then
         if v.ToolTip == "Melee" then
@@ -56,7 +55,7 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
         end
     end
 end
-end)
+
 
 -- Get Fruit Data
 pcall(function()
@@ -299,5 +298,4 @@ function sendwebhook2(msg)
     
     set = game:service'HttpService':JSONDecode(readfile(Name))
     ]]
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/LongTriggered/ProjectForLoi/refs/heads/main/ProjectSupport", true))()
-    end)
+    ---
