@@ -1,1 +1,41 @@
+-- Đường dẫn tệp JSON
+local fileName = game.Players.LocalPlayer.Name.."_Data" .. ".json" -- Đặt tên tệp JSON của bạn
 
+-- URL webhook Discord
+
+-- Đọc nội dung tệp JSON
+local fileData = readfile(fileName)
+
+-- Tạo nội dung body của yêu cầu với multipart/form-data
+local boundary = "------------------------" .. game:GetService("HttpService"):GenerateGUID(false)
+local body = "--" .. boundary .. "\r\n"
+    .. "Content-Disposition: form-data; name=\"file\"; filename=\"" .. fileName .. "\"\r\n"
+    .. "Content-Type: application/json\r\n\r\n"
+    .. fileData .. "\r\n--" .. boundary .. "--"
+
+-- Định nghĩa headers
+local headers = {
+    ["Content-Type"] = "multipart/form-data; boundary=" .. boundary,
+    ["Content-Length"] = tostring(#body),
+}
+
+-- Gửi yêu cầu HTTP
+local requestFunction = http_request or request or HttpPost or syn.request
+if requestFunction then
+    local response = requestFunction({
+        Url = DiscordWebhookUrl,
+        Method = "POST",
+        Headers = headers,
+        Body = body,
+    })
+
+    -- Hiển thị phản hồi để kiểm tra lỗi hoặc thành công
+    if response then
+        print("Trạng thái: " .. response.StatusCode)
+        print("Phản hồi: " .. response.Body)
+    else
+        print("Không nhận được phản hồi từ máy chủ.")
+    end
+else
+    print("Không tìm thấy hàm gửi HTTP!")
+end
