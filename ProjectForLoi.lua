@@ -1,13 +1,61 @@
 
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
-Name = game.Players.LocalPlayer.Name
-Level = game.Players.LocalPlayer.Data.Level.Value
-Bounty = game.Players.LocalPlayer.leaderstats['Bounty/Honor'].Value
-DevilFruit = game.Players.LocalPlayer.Data.DevilFruit.Value
-Race =game.Players.LocalPlayer.Data.Race.Value
-Fragments = game.Players.LocalPlayer.Data.Fragments.Value
-Beli = game.Players.LocalPlayer.Data.Beli.Value
-Valor = game.Players.LocalPlayer.Data.Valor.Value
+Name = game:GetService('Players').LocalPlayer.Name
+Level = game:GetService('Players').LocalPlayer.Data.Level.Value
+Bounty = game:GetService('Players').LocalPlayer.leaderstats['Bounty/Honor'].Value
+DevilFruit = game:GetService('Players').LocalPlayer.Data.DevilFruit.Value
+Race = game:GetService('Players').LocalPlayer.Data.Race.Value
+Fragments = game:GetService('Players').LocalPlayer.Data.Fragments.Value
+Beli = game:GetService('Players').LocalPlayer.Data.Beli.Value
+Valor = game:GetService('Players').LocalPlayer.Data.Valor.Value
+
+PlayerCurrentMelee = ""
+PlayerCurrentMeleeLevel = ""
+
+PlayerCurrentSword = ""
+PlayerCurrentSwordLevel = ""
+
+PlayerCurrentFruit = ""
+PlayerCurrentFruitLevel = ""
+
+PlayerCurrentGun = ""
+PlayerCurrentGunLevel = ""
+
+for i ,v in pairs(game:GetService('Players').LocalPlayer.Backpack:GetChildren()) do
+    if v:IsA("Tool") then
+        if v.ToolTip == "Melee" then
+            PlayerCurrentMelee = v.Name
+            PlayerCurrentMeleeLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+        elseif v.ToolTip == "Blox Fruit" then
+            PlayerCurrentFruit = v.Name
+            PlayerCurrentFruitLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+        elseif v.ToolTip == "Sword" then
+            PlayerCurrentSword = v.Name
+            PlayerCurrentSwordLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+        elseif v.ToolTip == "Gun" then
+            PlayerCurrentGun = v.Name
+            PlayerCurrentGunLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+        end
+    end
+end
+for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()) do
+    if v:IsA("Tool") then
+        if v.ToolTip == "Melee" then
+            PlayerCurrentMelee = v.Name
+            PlayerCurrentMeleeLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+        elseif v.ToolTip == "Blox Fruit" then
+            PlayerCurrentFruit = v.Name
+            PlayerCurrentFruitLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+        elseif v.ToolTip == "Sword" then
+            PlayerCurrentSword = v.Name
+            PlayerCurrentSwordLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+        elseif v.ToolTip == "Gun" then
+            PlayerCurrentGun = v.Name
+            PlayerCurrentGunLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+        end
+    end
+end
+
 
 -- Get Fruit Data
 pcall(function()
@@ -72,6 +120,33 @@ local data = {
            ["thumbnail"] = {
                 ["url"] = "https://i.imgur.com/LOkRYqi.png"
            },
+           ["fields"] = { -- Make a table
+				{ -- now make a new one for each field you wish to add
+					["name"] = PlayerCurrentMelee;
+					["value"] = "Mastery: "..PlayerCurrentMeleeLevel; -- The text,value or information under the title of the field aka name.
+					["inline"] = true; -- means that its either inline with others, from left to right or if it is set to false, from up to down.
+				},
+				{
+					["name"] = PlayerCurrentFruit;
+					["value"] = "Mastery: "..PlayerCurrentFruitLevel;
+					["inline"] = true;
+				},
+                {
+					["name"] = "";
+					["value"] = "";
+					["inline"] = true;
+				},
+                {
+					["name"] = PlayerCurrentSword;
+					["value"] = "Mastery: "..PlayerCurrentSwordLevel;
+					["inline"] = true;
+				},
+                {
+					["name"] = PlayerCurrentGun;
+					["value"] = "Mastery: "..PlayerCurrentGunLevel;
+					["inline"] = true;
+				}
+			},
 
            ["footer"] = {
                 ["text"] = "Date: "..tostring(os.date("%d/%m/%Y"))
@@ -200,7 +275,7 @@ function sendwebhook2(msg)
                     end
                end
         end)
-        PrintTable = ""
+        PrintTable = "Player Name: "..Name..",".."Level: "..Level..",".."Bounty: "..Bounty..",".."Race: "..Race..",".."Fragments: "..Fragments..",".."Beli: "..Beli..",".."Valor Level: "..Valor.."|"
         for i,v in pairs(TestTable2) do
             PrintTable = PrintTable.."Fruit Name: "..v.Name.." , "
            for a,b in pairs(v) do
