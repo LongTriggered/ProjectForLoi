@@ -190,7 +190,7 @@ function sendwebhook2(msg)
         description = " ";
     };
     (syn and syn.request or http_request) {
-        Url = "https://discord.com/api/webhooks/1328437666416562280/IFvig8H4Ll47jk2V_nHcEqZcpcnQe9c5DMhHx_TnTg3kW4sNU7kdUwnGbIUNH6Kregg5";
+        Url = DiscordWebhookUrl;
         Method = 'POST';
         Headers = {
             ['Content-Type'] = 'application/json';
@@ -275,7 +275,7 @@ function sendwebhook2(msg)
                     end
                end
         end)
-        PrintTable = "Player Name: "..Name..",".."Level: "..Level..",".."Bounty: "..Bounty..",".."Race: "..Race..",".."Fragments: "..Fragments..",".."Beli: "..Beli..",".."Valor Level: "..Valor.."|"
+        PrintTable = "Player Name: "..Name..",".."Level: "..Level..",".."Bounty: "..Bounty..",".."Race: "..Race..",".."Fragments: "..Fragments..",".."Beli: "..Beli..",".."Valor Level: "..Valor..",".."Melee: "..PlayerCurrentMelee..",".."Mastery: "..PlayerCurrentMeleeLevel..",".."Blox Fruit: "..PlayerCurrentFruit..",".."Mastery: "..PlayerCurrentFruitLevel..",".."Sword: "..PlayerCurrentSword..",".."Mastery: "..PlayerCurrentSwordLevel..",".."Gun: "..PlayerCurrentGun..",".."Mastery: "..PlayerCurrentGunLevel.."|"
         for i,v in pairs(TestTable2) do
             PrintTable = PrintTable.."Fruit Name: "..v.Name.." , "
            for a,b in pairs(v) do
