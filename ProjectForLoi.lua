@@ -1,4 +1,5 @@
 
+ DiscordWebhookUrl = "https://discord.com/api/webhooks/1328437666416562280/IFvig8H4Ll47jk2V_nHcEqZcpcnQe9c5DMhHx_TnTg3kW4sNU7kdUwnGbIUNH6Kregg5"
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 Name = game.Players.LocalPlayer.Name
 Level = game.Players.LocalPlayer.Data.Level.Value
@@ -161,10 +162,60 @@ function sendwebhook2(msg)
             PlayerFruitList3 = PlayerFruitList3 ..  player .. "\n"
         end
     
-       print(PlayerFruitList1)
-       print(PlayerFruitList2)
-       print(PlayerFruitList3)
-    
     sendwebhook2(PlayerFruitList1)
     sendwebhook2(PlayerFruitList2)
     sendwebhook2(PlayerFruitList3)
+
+--Send Data Into Json code ( t luoi gop code lai )
+    pcall(function()
+        FruitTable2 = {}
+        PlayerFruitTable2 = {}
+        TestTable2 = {}
+        local args = {
+            [1] = "GetFruits",
+            [2] = false}
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))    
+        game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
+        game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
+            Fruit2 = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+            for i,v in pairs(Fruit2) do
+                for a,b in pairs(v) do
+                       if a == "Name" then
+                    table.insert(FruitTable2,b)
+                        end
+                end
+            end
+            local args = {[1] = "getInventory"}
+                game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
+                game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()   
+               local Inventory2 = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+               for i,v in pairs(Inventory2) do
+                    if table.find(FruitTable2,v.Name) then               
+                                table.insert(TestTable2,v)
+                    end
+               end
+        end)
+        PrintTable = ""
+        for i,v in pairs(TestTable2) do
+            PrintTable = PrintTable.."Fruit Name: "..v.Name.." , "
+           for a,b in pairs(v) do
+            if a ~= "Type" and a ~= "Equipped" and a ~= "MasteryRequirements" and a~= "AwakeningData" and a~= "Name" and a~= "Value" then
+                if a~= "Mastery" then
+            PrintTable = PrintTable..a.."="..b.." , "
+                else
+            PrintTable = PrintTable..a.."="..b.." | "
+                end
+        end
+    end
+    end
+    local Name = game.Players.LocalPlayer.Name.."_Data" .. ".json"
+    writefile(Name, game:service'HttpService':JSONEncode(PrintTable))
+    [[
+    local set
+    if not pcall(function() readfile(Name) end) then 
+        writefile(Name, game:service'HttpService':JSONEncode(PrintTable))
+         end
+    
+    set = game:service'HttpService':JSONDecode(readfile(Name))
+    ]]
+    ---
