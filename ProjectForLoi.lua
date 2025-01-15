@@ -1,5 +1,4 @@
 
- DiscordWebhookUrl = "https://discord.com/api/webhooks/1328437666416562280/IFvig8H4Ll47jk2V_nHcEqZcpcnQe9c5DMhHx_TnTg3kW4sNU7kdUwnGbIUNH6Kregg5"
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 Name = game.Players.LocalPlayer.Name
 Level = game.Players.LocalPlayer.Data.Level.Value
@@ -104,9 +103,9 @@ request = http_request or request or HttpPost or syn.request
 local abcdef = {Url = DiscordWebhookUrl, Body = newdata, Method = "POST", Headers = headers}
 
 request(abcdef)
+return true
 end
     ---
-SendWebHook1()
 
 function sendwebhook2(msg)
     Content = '';
@@ -166,10 +165,11 @@ function sendwebhook2(msg)
         for _, player in ipairs(thirdPart) do
             PlayerFruitList3 = PlayerFruitList3 ..  player .. "\n"
         end
-    
+    if SendWebHook1() == true then
     sendwebhook2(PlayerFruitList1)
     sendwebhook2(PlayerFruitList2)
     sendwebhook2(PlayerFruitList3)
+    end
 
 --Send Data Into Json code ( t luoi gop code lai )
     pcall(function()
