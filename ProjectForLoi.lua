@@ -146,17 +146,17 @@ function sendwebhook2(msg)
         end
     end
     
-    local PlayerFruitList1 = "Fruit Inventory:\n"
+    local PlayerFruitList1 = "•Fruit Inventory:\n"
         for _, player in ipairs(firstPart) do
             PlayerFruitList1 = PlayerFruitList1 ..  player .. "\n"
         end
     
-    local PlayerFruitList2 = "Fruit Inventory:\n"
+    local PlayerFruitList2 = "•Fruit Inventory:\n"
         for _, player in ipairs(secondPart) do
             PlayerFruitList2 = PlayerFruitList2 ..  player .. "\n"
         end
     
-    local PlayerFruitList3 = "Fruit Inventory:\n"
+    local PlayerFruitList3 = "•Fruit Inventory:\n"
         for _, player in ipairs(thirdPart) do
             PlayerFruitList3 = PlayerFruitList3 ..  player .. "\n"
         end
