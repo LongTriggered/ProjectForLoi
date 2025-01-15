@@ -275,7 +275,7 @@ function sendwebhook2(msg)
                     end
                end
         end)
-        PrintTable = "Player Name: "..Name..",".."Level: "..Level..",".."Bounty: "..Bounty..",".."Race: "..Race..",".."Fragments: "..Fragments..",".."Beli: "..Beli..",".."Valor Level: "..Valor..",".."Melee: "..PlayerCurrentMelee..",".."Mastery: "..PlayerCurrentMeleeLevel..",".."Blox Fruit: "..PlayerCurrentFruit..",".."Mastery: "..PlayerCurrentFruitLevel..",".."Sword: "..PlayerCurrentSword..",".."Mastery: "..PlayerCurrentSwordLevel..",".."Gun: "..PlayerCurrentGun..",".."Mastery: "..PlayerCurrentGunLevel.."|"
+        PrintTable = "Player Name: "..Name..",".."Level: "..Level..",".."Bounty: "..Bounty..",".."Race: "..Race..",".."Fragments: "..Fragments..",".."Beli: "..Beli..",".."Valor Level: "..Valor.."|"
         for i,v in pairs(TestTable2) do
             PrintTable = PrintTable.."Fruit Name: "..v.Name.." , "
            for a,b in pairs(v) do
