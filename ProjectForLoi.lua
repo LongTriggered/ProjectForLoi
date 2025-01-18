@@ -20,7 +20,7 @@ PlayerCurrentFruitLevel = ""
 
 PlayerCurrentGun = ""
 PlayerCurrentGunLevel = ""
-
+pcall(function()
 for i ,v in pairs(game:GetService('Players').LocalPlayer.Backpack:GetChildren()) do
     if v:IsA("Tool") then
         if v.ToolTip == "Melee" then
@@ -55,7 +55,7 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
         end
     end
 end
-
+end)
 
 -- Get Fruit Data
 pcall(function()
@@ -97,7 +97,8 @@ pcall(function()
            end
     end)
 -- webhook func
-function SendWebHook1()
+function SendWebhook1()
+    if SendPlayerDataAsWebhook then
 
 local data = {
 
@@ -152,14 +153,6 @@ local data = {
                 ["text"] = "Date: "..tostring(os.date("%d/%m/%Y"))
            },
 
-           ["image"] = {
-
-               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
-
-                   tostring(game:GetService("Players").LocalPlayer.Name)
-
-           }
-
        }
 
    }
@@ -178,11 +171,12 @@ request = http_request or request or HttpPost or syn.request
 local abcdef = {Url = DiscordWebhookUrl, Body = newdata, Method = "POST", Headers = headers}
 
 request(abcdef)
-return true
-end
-    ---
 
-function sendwebhook2(msg)
+end
+end
+
+function SendWebhook2(msg)
+    if SendPlayerFruitDataAsWebhook then
     Content = '';
     Embed = {
         title = msg;
@@ -198,7 +192,9 @@ function sendwebhook2(msg)
         Body = game:GetService'HttpService':JSONEncode( { content = Content; embeds = { Embed } } );
     };
     end
-    
+end
+
+--Function chia bang lam 3
     local totalElements = #PlayerFruitTable
     local partSize = math.ceil(totalElements / 3)  -- Chia tổng số phần tử cho 3 và làm tròn lên
     
@@ -240,54 +236,68 @@ function sendwebhook2(msg)
         for _, player in ipairs(thirdPart) do
             PlayerFruitList3 = PlayerFruitList3 ..  player .. "\n"
         end
-    if SendWebHook1() == true then
-    sendwebhook2(PlayerFruitList1)
-    sendwebhook2(PlayerFruitList2)
-    sendwebhook2(PlayerFruitList3)
-    end
+-------------------
+--Collect Player Data
+pcall(function()
+    FruitTable2 = {}
+    PlayerFruitTable2 = {}
+    TestTable2 = {}
+    PlayerFruitData = {}
+    --Remote Event
+    game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
+    game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()   
+        Fruit2 = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits", false)
+        Inventory2 = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventory")
+--
+        -- ListFruit from FruitStock:
+        for i,v in pairs(Fruit2) do
+            for a,b in pairs(v) do
+                   if a == "Name" then
+                table.insert(FruitTable2,b)
+                    end
+            end
+        end
+        ---
+        for i,v in pairs(Inventory2) do
+            if table.find(FruitTable2,v.Name) then               
+                table.insert(TestTable2,v.Name)
+            end
+        end
+        ---
+        for i,v in pairs(Inventory2) do
+            if table.find(FruitTable2,v.Name) then               
+                        table.insert(PlayerFruitData,v)
+            end
+       end
+        ---
+PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Melee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel..", ".."Blox Fruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel..", ".."Sword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel..", ".."Gun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.."| "
 
---Send Data Into Json code ( t luoi gop code lai )
-    pcall(function()
-        FruitTable2 = {}
-        PlayerFruitTable2 = {}
-        TestTable2 = {}
-        local args = {
-            [1] = "GetFruits",
-            [2] = false}
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))    
-        game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
-        game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
-            Fruit2 = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-            for i,v in pairs(Fruit2) do
-                for a,b in pairs(v) do
-                       if a == "Name" then
-                    table.insert(FruitTable2,b)
+       for i,v in pairs(FruitTable2) do
+        NameFruit = v
+        if table.find(TestTable2,v) then
+            PrintTable = PrintTable.."Fruit Name: "..NameFruit.." , "
+            for l,k in pairs(PlayerFruitData) do
+                if k.Name == NameFruit then
+                    for a,b in pairs(k) do
+                        if a ~= "AwakeningData" and a ~= "Equipped" and a~= "MasteryRequirements" and a ~= "Type" and a~= "Name" and a ~= "Value" and a ~= "Rarity" then
+                            if a~= "Mastery" then
+                            PrintTable = PrintTable..a.." = "..b.." , "
+                            else
+                                PrintTable = PrintTable..a.." = "..b.." | "
+                            end
                         end
+                    end
                 end
             end
-            local args = {[1] = "getInventory"}
-                game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
-                game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()   
-               local Inventory2 = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-               for i,v in pairs(Inventory2) do
-                    if table.find(FruitTable2,v.Name) then               
-                                table.insert(TestTable2,v)
-                    end
-               end
-        end)
-        PrintTable = "Player Name: "..Name..",".."Level: "..Level..",".."Bounty: "..Bounty..",".."Race: "..Race..",".."Fragments: "..Fragments..",".."Beli: "..Beli..",".."Valor Level: "..Valor..",".."Melee: "..PlayerCurrentMelee..",".."Mastery: "..PlayerCurrentMeleeLevel..",".."Blox Fruit: "..PlayerCurrentFruit..",".."Mastery: "..PlayerCurrentFruitLevel..",".."Sword: "..PlayerCurrentSword..",".."Mastery: "..PlayerCurrentSwordLevel..",".."Gun: "..PlayerCurrentGun..",".."Mastery: "..PlayerCurrentGunLevel.."|"
-        for i,v in pairs(TestTable2) do
-            PrintTable = PrintTable.."Fruit Name: "..v.Name.." , "
-           for a,b in pairs(v) do
-            if a ~= "Type" and a ~= "Equipped" and a ~= "MasteryRequirements" and a~= "AwakeningData" and a~= "Name" and a~= "Value" then
-                if a~= "Mastery" then
-            PrintTable = PrintTable..a.."="..b.." , "
-                else
-            PrintTable = PrintTable..a.."="..b.." | "
-                end
-        end
+        else
+           PrintTable = PrintTable.."Fruit Name: "..v.." , ".."Count = 0".." , ".."Mastery : Unknown | "
+       end
     end
-    end
+end)
+---------------------
+
+function SendDataJson()
+    if SendDataAsJson then
     local Name = game.Players.LocalPlayer.Name.."_Data" .. ".json"
     writefile(Name, game:service'HttpService':JSONEncode(PrintTable))
     
@@ -331,4 +341,15 @@ function sendwebhook2(msg)
     else
         print("Không tìm thấy hàm gửi HTTP!")
     end
-    ---
+end
+end
+
+--Run Function
+SendWebhook1()
+
+SendWebhook2(PlayerFruitList1)
+SendWebhook2(PlayerFruitList2)
+SendWebhook2(PlayerFruitList3)
+
+SendDataJson()
+--
