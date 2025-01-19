@@ -1,4 +1,4 @@
-
+while _G.AutoExecuteData["AutoExecute"] do
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 Name = game:GetService('Players').LocalPlayer.Name
 Level = game:GetService('Players').LocalPlayer.Data.Level.Value
@@ -434,3 +434,5 @@ SendWebhook2(PlayerFruitList3)
 
 SendDataJson()
 --
+wait(_G.AutoExecuteData["TimePerExecute"])
+end
