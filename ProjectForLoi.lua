@@ -270,29 +270,103 @@ pcall(function()
             end
        end
         ---
-PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Melee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel..", ".."Blox Fruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel..", ".."Sword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel..", ".."Gun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.."| "
+PrintTable = "{'Player Name': ".."'"..Name.."'"..", ".."'Level': ".."'"..Level.."'"..", ".."'Bounty': ".."'"..Bounty.."'"..", ".."'Race': ".."'"..Race.."'"..", ".."'Fragments': ".."'"..Fragments.."'"..", ".."'Beli': ".."'"..Beli.."'"..", ".."'Valor Level': ".."'"..Valor.."'".."}, ".."{'CurrentMelee': ".."'"..PlayerCurrentMelee.."'"..", ".."'Mastery': ".."'"..PlayerCurrentMeleeLevel.."'".."}, ".."{'CurrentBloxFruit': ".."'"..PlayerCurrentFruit.."'"..", ".."'Mastery': ".."'"..PlayerCurrentFruitLevel.."'".."}, ".."{'CurrentSword': ".."'"..PlayerCurrentSword.."'"..", ".."'Mastery': ".."'"..PlayerCurrentSwordLevel.."'".."}, ".."{'CurrentGun': ".."'"..PlayerCurrentGun.."'"..", ".."'Mastery': ".."'"..PlayerCurrentGunLevel.."'".."}, "
 
        for i,v in pairs(FruitTable2) do
         NameFruit = v
         if table.find(TestTable2,v) then
-            PrintTable = PrintTable.."Fruit Name: "..NameFruit.." , "
+            PrintTable = PrintTable.."{'Fruit Name': ".."'"..NameFruit.."'"..", "
             for l,k in pairs(PlayerFruitData) do
                 if k.Name == NameFruit then
                     for a,b in pairs(k) do
                         if a ~= "AwakeningData" and a ~= "Equipped" and a~= "MasteryRequirements" and a ~= "Type" and a~= "Name" and a ~= "Value" and a ~= "Rarity" then
                             if a~= "Mastery" then
-                            PrintTable = PrintTable..a.." = "..b.." , "
+                            PrintTable = PrintTable.."'"..a.."'"..": ".."'"..b.."'"..", "
                             else
-                                PrintTable = PrintTable..a.." = "..b.." | "
+                                PrintTable = PrintTable.."'"..a.."'"..": ".."'"..b.."'".."}, "
                             end
                         end
                     end
                 end
             end
         else
-           PrintTable = PrintTable.."Fruit Name: "..v.." , ".."Count = 0".." , ".."Mastery : Unknown | "
+           PrintTable = PrintTable.."{'Fruit Name': ".."'"..v.."'"..", ".."'Count': '0'"..", ".."'Mastery' : -}, "
        end
     end
+
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits",false)   
+    game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
+    game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
+    Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventory")
+           for i,v in pairs(Inventory) do
+                    for i1,v1 in pairs(v) do
+                        if v.Type == "Sword"  then
+                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
+                                if i1 == "Name" then
+                                    PrintTable = PrintTable.."{'Sword "..i1.."'"..": ".."'"..v1.."'"..", "
+                                    else
+                                        if i1 == "Mastery" then
+                                            PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'".."}, "
+                                            else
+                                            PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'"..", "
+                                        end
+                                end
+                        end
+                    end
+                end
+           end
+           for i,v in pairs(Inventory) do
+            for i1,v1 in pairs(v) do
+                if v.Type == "Gun"  then
+                    if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
+                        if i1 == "Name" then
+                        PrintTable = PrintTable.."{'Gun "..i1.."'"..": ".."'"..v1.."'"..", "
+                        else
+                            if i1 == "Mastery" then
+                                PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'".."}, "
+                                else
+                                PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'"..", "
+                            end
+                        end
+                end
+            end
+        end
+   end
+            for i,v in pairs(Inventory) do
+                for i1,v1 in pairs(v) do
+                    if v.Type == "Wear"  then
+                        if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
+                            if i1 == "Name" then
+                                PrintTable = PrintTable.."{'Accessory "..i1.."'"..": ".."'"..v1.."'"..", "
+                                else
+                                    if i1 == "Mastery" then
+                                        PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'".."}, "
+                                        else
+                                        PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'"..", "
+                                    end
+                                end
+                    end
+                end
+            end
+            end
+            for i,v in pairs(Inventory) do
+                for i1,v1 in pairs(v) do
+                    if v.Type == "Material"  then
+                        if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
+                            if i1 == "Name" then
+                                PrintTable = PrintTable.."{'Material "..i1.."'"..": ".."'"..v1.."'"..", "
+                                else
+                                    if i1 == "MaxCount" then
+                                        PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'".."}, "
+                                        else
+                                        PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'"..", "
+                                    end
+                                end
+                    end
+                end
+            end
+            end
+
 end)
 ---------------------
 
@@ -336,8 +410,11 @@ function SendDataJson()
         
             -- Hiển thị phản hồi để kiểm tra lỗi hoặc thành công
             if response then
-                print("Trạng thái: " .. response.StatusCode)
-                print("Phản hồi: " .. response.Body)
+                if tonumber(response.StatusCode) < 400 then
+                print("Trạng thái: Successfully Excuted")
+                else
+                print("Trạng thái: Webhook failed")
+                end
             else
                 print("Không nhận được phản hồi từ máy chủ.")
             end
