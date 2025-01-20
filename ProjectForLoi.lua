@@ -272,27 +272,27 @@ pcall(function()
             end
        end
         ---
-PrintTable = "{'Player Name': ".."'"..Name.."'"..", ".."'Level': ".."'"..Level.."'"..", ".."'Bounty': ".."'"..Bounty.."'"..", ".."'Race': ".."'"..Race.."'"..", ".."'Fragments': ".."'"..Fragments.."'"..", ".."'Beli': ".."'"..Beli.."'"..", ".."'Valor Level': ".."'"..Valor.."'".."}, ".."{'CurrentMelee': ".."'"..PlayerCurrentMelee.."'"..", ".."'Mastery': ".."'"..PlayerCurrentMeleeLevel.."'".."}, ".."{'CurrentBloxFruit': ".."'"..PlayerCurrentFruit.."'"..", ".."'Mastery': ".."'"..PlayerCurrentFruitLevel.."'".."}, ".."{'CurrentSword': ".."'"..PlayerCurrentSword.."'"..", ".."'Mastery': ".."'"..PlayerCurrentSwordLevel.."'".."}, ".."{'CurrentGun': ".."'"..PlayerCurrentGun.."'"..", ".."'Mastery': ".."'"..PlayerCurrentGunLevel.."'".."}, "
+PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | "
 
        for i,v in pairs(FruitTable2) do
         NameFruit = v
         if table.find(TestTable2,v) then
-            PrintTable = PrintTable.."{'Fruit Name': ".."'"..NameFruit.."'"..", "
+            PrintTable = PrintTable.."Fruit Name: "..NameFruit..", "
             for l,k in pairs(PlayerFruitData) do
                 if k.Name == NameFruit then
                     for a,b in pairs(k) do
                         if a ~= "AwakeningData" and a ~= "Equipped" and a~= "MasteryRequirements" and a ~= "Type" and a~= "Name" and a ~= "Value" and a ~= "Rarity" then
                             if a~= "Mastery" then
-                            PrintTable = PrintTable.."'"..a.."'"..": ".."'"..b.."'"..", "
+                            PrintTable = PrintTable..a..": "..b..", "
                             else
-                                PrintTable = PrintTable.."'"..a.."'"..": ".."'"..b.."'".."}, "
+                                PrintTable = PrintTable..a..": "..b.." | "
                             end
                         end
                     end
                 end
             end
         else
-           PrintTable = PrintTable.."{'Fruit Name': ".."'"..v.."'"..", ".."'Count': '0'"..", ".."'Mastery' : -}, "
+           PrintTable = PrintTable.."Fruit Name: "..v..", ".."Count: 0"..", ".."Mastery : - | "
        end
     end
 
@@ -305,12 +305,12 @@ PrintTable = "{'Player Name': ".."'"..Name.."'"..", ".."'Level': ".."'"..Level..
                         if v.Type == "Sword"  then
                             if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
                                 if i1 == "Name" then
-                                    PrintTable = PrintTable.."{'Sword "..i1.."'"..": ".."'"..v1.."'"..", "
+                                    PrintTable = PrintTable.."Sword "..i1..": "..v1..", "
                                     else
                                         if i1 == "Mastery" then
-                                            PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'".."}, "
+                                            PrintTable = PrintTable..i1..": "..v1.." | "
                                             else
-                                            PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'"..", "
+                                            PrintTable = PrintTable..i1..": "..v1..", "
                                         end
                                 end
                         end
@@ -322,13 +322,13 @@ PrintTable = "{'Player Name': ".."'"..Name.."'"..", ".."'Level': ".."'"..Level..
                 if v.Type == "Gun"  then
                     if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
                         if i1 == "Name" then
-                        PrintTable = PrintTable.."{'Gun "..i1.."'"..": ".."'"..v1.."'"..", "
-                        else
-                            if i1 == "Mastery" then
-                                PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'".."}, "
-                                else
-                                PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'"..", "
-                            end
+                            PrintTable = PrintTable.."Gun "..i1..": "..v1..", "
+                            else
+                                if i1 == "Mastery" then
+                                    PrintTable = PrintTable..i1..": "..v1.." | "
+                                    else
+                                    PrintTable = PrintTable..i1..": "..v1..", "
+                                end
                         end
                 end
             end
@@ -339,14 +339,14 @@ PrintTable = "{'Player Name': ".."'"..Name.."'"..", ".."'Level': ".."'"..Level..
                     if v.Type == "Wear"  then
                         if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
                             if i1 == "Name" then
-                                PrintTable = PrintTable.."{'Accessory "..i1.."'"..": ".."'"..v1.."'"..", "
+                                PrintTable = PrintTable.."Accessory "..i1..": "..v1..", "
                                 else
                                     if i1 == "Mastery" then
-                                        PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'".."}, "
+                                        PrintTable = PrintTable..i1..": "..v1.." | "
                                         else
-                                        PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'"..", "
+                                        PrintTable = PrintTable..i1..": "..v1..", "
                                     end
-                                end
+                            end
                     end
                 end
             end
@@ -356,14 +356,14 @@ PrintTable = "{'Player Name': ".."'"..Name.."'"..", ".."'Level': ".."'"..Level..
                     if v.Type == "Material"  then
                         if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
                             if i1 == "Name" then
-                                PrintTable = PrintTable.."{'Material "..i1.."'"..": ".."'"..v1.."'"..", "
+                                PrintTable = PrintTable.."Material "..i1..": "..v1..", "
                                 else
                                     if i1 == "MaxCount" then
-                                        PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'".."}, "
+                                        PrintTable = PrintTable..i1..": "..v1.." | "
                                         else
-                                        PrintTable = PrintTable.."'"..i1.."'"..": ".."'"..v1.."'"..", "
+                                        PrintTable = PrintTable..i1..": "..v1..", "
                                     end
-                                end
+                            end
                     end
                 end
             end
