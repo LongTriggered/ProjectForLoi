@@ -10,6 +10,13 @@ Race = game:GetService('Players').LocalPlayer.Data.Race.Value
 Fragments = game:GetService('Players').LocalPlayer.Data.Fragments.Value
 Beli = game:GetService('Players').LocalPlayer.Data.Beli.Value
 Valor = game:GetService('Players').LocalPlayer.Data.Valor.Value
+--Remote Event
+game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
+game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
+
+Fruit = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits",false)
+Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventory")
+-----
 
 PlayerCurrentMelee = ""
 PlayerCurrentMeleeLevel = ""
@@ -60,19 +67,10 @@ end
 end)
 
 -- Get Fruit Data
+if SendPlayerFruitDataAsWebhook then
 pcall(function()
     FruitTable = {}
     PlayerFruitTable = {}
-    local args = {
-        [1] = "GetFruits",
-        [2] = false
-    }
-    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-    
-    game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
-    game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
-    
-        Fruit = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
         for i,v in pairs(Fruit) do
             for a,b in pairs(v) do
                    if a == "Name" then
@@ -81,13 +79,6 @@ pcall(function()
             end
         end
      ---get Fruit in Inventory
-        local args = {
-            [1] = "getInventory"
-        }
-            game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
-            game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
-        
-           local Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
            for i,v in pairs(Inventory) do
                 if table.find(FruitTable,v.Name) then
                     for i1,v1 in pairs(v) do
@@ -97,7 +88,175 @@ pcall(function()
                     end
                 end
            end
+--Function chia bang lam 3
+ totalElements = #PlayerFruitTable
+ partSize = math.ceil(totalElements / 3)  -- Chia tổng số phần tử cho 3 và làm tròn lên
+
+-- Chia bảng thành 3 phần
+ firstPart = {}
+ secondPart = {}
+ thirdPart = {}
+
+-- Phần đầu tiên
+for i = 1, partSize do
+    table.insert(firstPart, PlayerFruitTable[i])
+end
+
+-- Phần thứ hai
+for i = partSize + 1, 2 * partSize do
+    if PlayerFruitTable[i] then
+        table.insert(secondPart, PlayerFruitTable[i])
+    end
+end
+
+-- Phần thứ ba
+for i = 2 * partSize + 1, totalElements do
+    if PlayerFruitTable[i] then
+        table.insert(thirdPart, PlayerFruitTable[i])
+    end
+end
+
+ PlayerFruitList1 = "•Fruit Inventory:\n"
+    for _, player in ipairs(firstPart) do
+        PlayerFruitList1 = PlayerFruitList1 ..  player .. "\n"
+    end
+
+ PlayerFruitList2 = "•Fruit Inventory:\n"
+    for _, player in ipairs(secondPart) do
+        PlayerFruitList2 = PlayerFruitList2 ..  player .. "\n"
+    end
+
+ PlayerFruitList3 = "•Fruit Inventory:\n"
+    for _, player in ipairs(thirdPart) do
+        PlayerFruitList3 = PlayerFruitList3 ..  player .. "\n"
+    end
+end)
+end
+-------------
+--Collect Player Data
+if SendDataAsJson then
+    pcall(function()
+        FruitTable2 = {}
+        PlayerFruitTable2 = {}
+        TestTable2 = {}
+        PlayerFruitData = {}
+    --
+            -- ListFruit from FruitStock:
+            for i,v in pairs(Fruit) do
+                for a,b in pairs(v) do
+                       if a == "Name" then
+                    table.insert(FruitTable2,b)
+                        end
+                end
+            end
+            ---
+            for i,v in pairs(Inventory) do
+                if table.find(FruitTable2,v.Name) then               
+                    table.insert(TestTable2,v.Name)
+                end
+            end
+            ---
+            for i,v in pairs(Inventory) do
+                if table.find(FruitTable2,v.Name) then               
+                            table.insert(PlayerFruitData,v)
+                end
+           end
+            ---
+    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | "
+           for i,v in pairs(FruitTable2) do
+            NameFruit = v
+            if table.find(TestTable2,v) then
+                PrintTable = PrintTable.."Fruit Name: "..NameFruit..", "
+                for l,k in pairs(PlayerFruitData) do
+                    if k.Name == NameFruit then
+                        for a,b in pairs(k) do
+                            if a ~= "AwakeningData" and a ~= "Equipped" and a~= "MasteryRequirements" and a ~= "Type" and a~= "Name" and a ~= "Value" and a ~= "Rarity" then
+                                if a~= "Mastery" then
+                                PrintTable = PrintTable..a..": "..b..", "
+                                else
+                                    PrintTable = PrintTable..a..": "..b.." | "
+                                end
+                            end
+                        end
+                    end
+                end
+            else
+               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Count: 0"..", ".."Mastery: - | "
+           end
+        end
+    
+               for i,v in pairs(Inventory) do
+                        for i1,v1 in pairs(v) do
+                            if v.Type == "Sword"  then
+                                if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
+                                    if i1 == "Name" then
+                                        PrintTable = PrintTable.."Sword "..i1..": "..v1..", "
+                                        else
+                                            if i1 == "Mastery" then
+                                                PrintTable = PrintTable..i1..": "..v1.." | "
+                                                else
+                                                PrintTable = PrintTable..i1..": "..v1..", "
+                                            end
+                                    end
+                            end
+                        end
+                    end
+               end
+               for i,v in pairs(Inventory) do
+                for i1,v1 in pairs(v) do
+                    if v.Type == "Gun"  then
+                        if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
+                            if i1 == "Name" then
+                                PrintTable = PrintTable.."Gun "..i1..": "..v1..", "
+                                else
+                                    if i1 == "Mastery" then
+                                        PrintTable = PrintTable..i1..": "..v1.." | "
+                                        else
+                                        PrintTable = PrintTable..i1..": "..v1..", "
+                                    end
+                            end
+                    end
+                end
+            end
+       end
+                for i,v in pairs(Inventory) do
+                    for i1,v1 in pairs(v) do
+                        if v.Type == "Wear"  then
+                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
+                                if i1 == "Name" then
+                                    PrintTable = PrintTable.."Accessory "..i1..": "..v1..", "
+                                    else
+                                        if i1 == "Mastery" then
+                                            PrintTable = PrintTable..i1..": "..v1.." | "
+                                            else
+                                            PrintTable = PrintTable..i1..": "..v1..", "
+                                        end
+                                end
+                        end
+                    end
+                end
+                end
+                for i,v in pairs(Inventory) do
+                    for i1,v1 in pairs(v) do
+                        if v.Type == "Material"  then
+                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
+                                if i1 == "Name" then
+                                    PrintTable = PrintTable.."Material "..i1..": "..v1..", "
+                                    else
+                                        if i1 == "MaxCount" then
+                                            PrintTable = PrintTable..i1..": "..v1.." | "
+                                            else
+                                            PrintTable = PrintTable..i1..": "..v1..", "
+                                        end
+                                end
+                        end
+                    end
+                end
+                end
+    
     end)
+    end
+---------------------
 -- webhook func
 function SendWebhook1()
     if SendPlayerDataAsWebhook then
@@ -195,182 +354,6 @@ function SendWebhook2(msg)
     };
     end
 end
-
---Function chia bang lam 3
-    local totalElements = #PlayerFruitTable
-    local partSize = math.ceil(totalElements / 3)  -- Chia tổng số phần tử cho 3 và làm tròn lên
-    
-    -- Chia bảng thành 3 phần
-    local firstPart = {}
-    local secondPart = {}
-    local thirdPart = {}
-    
-    -- Phần đầu tiên
-    for i = 1, partSize do
-        table.insert(firstPart, PlayerFruitTable[i])
-    end
-    
-    -- Phần thứ hai
-    for i = partSize + 1, 2 * partSize do
-        if PlayerFruitTable[i] then
-            table.insert(secondPart, PlayerFruitTable[i])
-        end
-    end
-    
-    -- Phần thứ ba
-    for i = 2 * partSize + 1, totalElements do
-        if PlayerFruitTable[i] then
-            table.insert(thirdPart, PlayerFruitTable[i])
-        end
-    end
-    
-    local PlayerFruitList1 = "•Fruit Inventory:\n"
-        for _, player in ipairs(firstPart) do
-            PlayerFruitList1 = PlayerFruitList1 ..  player .. "\n"
-        end
-    
-    local PlayerFruitList2 = "•Fruit Inventory:\n"
-        for _, player in ipairs(secondPart) do
-            PlayerFruitList2 = PlayerFruitList2 ..  player .. "\n"
-        end
-    
-    local PlayerFruitList3 = "•Fruit Inventory:\n"
-        for _, player in ipairs(thirdPart) do
-            PlayerFruitList3 = PlayerFruitList3 ..  player .. "\n"
-        end
--------------------
---Collect Player Data
-pcall(function()
-    FruitTable2 = {}
-    PlayerFruitTable2 = {}
-    TestTable2 = {}
-    PlayerFruitData = {}
-    --Remote Event
-    game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
-    game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()   
-        Fruit2 = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits", false)
-        Inventory2 = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventory")
---
-        -- ListFruit from FruitStock:
-        for i,v in pairs(Fruit2) do
-            for a,b in pairs(v) do
-                   if a == "Name" then
-                table.insert(FruitTable2,b)
-                    end
-            end
-        end
-        ---
-        for i,v in pairs(Inventory2) do
-            if table.find(FruitTable2,v.Name) then               
-                table.insert(TestTable2,v.Name)
-            end
-        end
-        ---
-        for i,v in pairs(Inventory2) do
-            if table.find(FruitTable2,v.Name) then               
-                        table.insert(PlayerFruitData,v)
-            end
-       end
-        ---
-PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | "
-
-       for i,v in pairs(FruitTable2) do
-        NameFruit = v
-        if table.find(TestTable2,v) then
-            PrintTable = PrintTable.."Fruit Name: "..NameFruit..", "
-            for l,k in pairs(PlayerFruitData) do
-                if k.Name == NameFruit then
-                    for a,b in pairs(k) do
-                        if a ~= "AwakeningData" and a ~= "Equipped" and a~= "MasteryRequirements" and a ~= "Type" and a~= "Name" and a ~= "Value" and a ~= "Rarity" then
-                            if a~= "Mastery" then
-                            PrintTable = PrintTable..a..": "..b..", "
-                            else
-                                PrintTable = PrintTable..a..": "..b.." | "
-                            end
-                        end
-                    end
-                end
-            end
-        else
-           PrintTable = PrintTable.."Fruit Name: "..v..", ".."Count: 0"..", ".."Mastery: - | "
-       end
-    end
-
-    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits",false)   
-    game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
-    game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
-    Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventory")
-           for i,v in pairs(Inventory) do
-                    for i1,v1 in pairs(v) do
-                        if v.Type == "Sword"  then
-                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
-                                if i1 == "Name" then
-                                    PrintTable = PrintTable.."Sword "..i1..": "..v1..", "
-                                    else
-                                        if i1 == "Mastery" then
-                                            PrintTable = PrintTable..i1..": "..v1.." | "
-                                            else
-                                            PrintTable = PrintTable..i1..": "..v1..", "
-                                        end
-                                end
-                        end
-                    end
-                end
-           end
-           for i,v in pairs(Inventory) do
-            for i1,v1 in pairs(v) do
-                if v.Type == "Gun"  then
-                    if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
-                        if i1 == "Name" then
-                            PrintTable = PrintTable.."Gun "..i1..": "..v1..", "
-                            else
-                                if i1 == "Mastery" then
-                                    PrintTable = PrintTable..i1..": "..v1.." | "
-                                    else
-                                    PrintTable = PrintTable..i1..": "..v1..", "
-                                end
-                        end
-                end
-            end
-        end
-   end
-            for i,v in pairs(Inventory) do
-                for i1,v1 in pairs(v) do
-                    if v.Type == "Wear"  then
-                        if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
-                            if i1 == "Name" then
-                                PrintTable = PrintTable.."Accessory "..i1..": "..v1..", "
-                                else
-                                    if i1 == "Mastery" then
-                                        PrintTable = PrintTable..i1..": "..v1.." | "
-                                        else
-                                        PrintTable = PrintTable..i1..": "..v1..", "
-                                    end
-                            end
-                    end
-                end
-            end
-            end
-            for i,v in pairs(Inventory) do
-                for i1,v1 in pairs(v) do
-                    if v.Type == "Material"  then
-                        if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
-                            if i1 == "Name" then
-                                PrintTable = PrintTable.."Material "..i1..": "..v1..", "
-                                else
-                                    if i1 == "MaxCount" then
-                                        PrintTable = PrintTable..i1..": "..v1.." | "
-                                        else
-                                        PrintTable = PrintTable..i1..": "..v1..", "
-                                    end
-                            end
-                    end
-                end
-            end
-            end
-
-end)
----------------------
 
 function SendDataJson()
     if SendDataAsJson then
