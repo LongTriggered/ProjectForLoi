@@ -292,7 +292,7 @@ PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bo
                 end
             end
         else
-           PrintTable = PrintTable.."Fruit Name: "..v..", ".."Count: 0"..", ".."Mastery : - | "
+           PrintTable = PrintTable.."Fruit Name: "..v..", ".."Count: 0"..", ".."Mastery: - | "
        end
     end
 
