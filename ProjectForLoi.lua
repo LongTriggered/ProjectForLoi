@@ -52,16 +52,16 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
     if v:IsA("Tool") then
         if v.ToolTip == "Melee" then
             PlayerCurrentMelee = v.Name
-            PlayerCurrentMeleeLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+            PlayerCurrentMeleeLevel = game:GetService('Players').LocalPlayer.Character[v.Name].Level.Value
         elseif v.ToolTip == "Blox Fruit" then
             PlayerCurrentFruit = v.Name
-            PlayerCurrentFruitLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+            PlayerCurrentFruitLevel = game:GetService('Players').LocalPlayer.Character[v.Name].Level.Value
         elseif v.ToolTip == "Sword" then
             PlayerCurrentSword = v.Name
-            PlayerCurrentSwordLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+            PlayerCurrentSwordLevel = game:GetService('Players').LocalPlayer.Character[v.Name].Level.Value
         elseif v.ToolTip == "Gun" then
             PlayerCurrentGun = v.Name
-            PlayerCurrentGunLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
+            PlayerCurrentGunLevel = game:GetService('Players').LocalPlayer.Character[v.Name].Level.Value
         end
     end
 end
