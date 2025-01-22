@@ -1,5 +1,6 @@
 repeat wait() until game:IsLoaded()
-
+repeat wait() until game.Players.LocalPlayer:FindFistChild('Character')
+repeat wait() until game.Players.LocalPlayer:FindFistChild('Backpack')
 repeat 
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 Name = game:GetService('Players').LocalPlayer.Name
