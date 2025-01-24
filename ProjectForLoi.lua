@@ -17,6 +17,14 @@ game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
 
 Fruit = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits",false)
 Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventory")
+
+Spy = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("InfoLeviathan",1)
+if Spy == -1 then
+   SpyText = "**Spy status: **Still in Cooldown"
+else
+    SpyText = "**Spy status: **Found Leviathan"
+end
+
 -----
 
 PlayerCurrentMelee = ""
@@ -163,7 +171,7 @@ if SendDataAsJson then
                 end
            end
             ---
-    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | "
+    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", "..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | "
            for i,v in pairs(FruitTable2) do
             NameFruit = v
             if table.find(TestTable2,v) then
