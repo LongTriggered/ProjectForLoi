@@ -20,9 +20,9 @@ Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ge
 
 Spy = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("InfoLeviathan",1)
 if Spy == -1 then
-   SpyText = "**Spy status: **Still in Cooldown"
+   SpyText = "Spy: Still in Cooldown"
 else
-    SpyText = "**Spy status: **Found Leviathan"
+    SpyText = "Spy: Found Leviathan"
 end
 
 -----
