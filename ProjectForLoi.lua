@@ -167,9 +167,10 @@ if SendDataAsJson then
         PrintMelee = ""
         NameMelee = {"BlackLeg","Electro","FishmanKarate","DragonClaw","Superhuman","DeathStep","SharkmanKarate","ElectricClaw","DragonTalon","Godhuman","SanguineArt"}
         for i,v in pairs(NameMelee) do
-        if v == "DragonClaw" then
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","1")
+        if v == "DragonClaw" then  
+            if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","1") == 1 or game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","1") == 2 then
             PrintMelee = PrintMelee..v..", "
+        end
         end
         a = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buy"..v,true)
         if a == 1 or a == 2 then
