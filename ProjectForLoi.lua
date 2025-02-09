@@ -171,16 +171,16 @@ if SendDataAsJson then
         PrintMelee = ""
         NameMelee = {"BlackLeg","Electro","FishmanKarate","DragonClaw","Superhuman","DeathStep","SharkmanKarate","ElectricClaw","DragonTalon","Godhuman","SanguineArt"}
         for i,v in pairs(NameMelee) do
-        if v == "DragonClaw" then  
-            if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","1") == 1 or game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","1") == 2 then
-            PrintMelee = PrintMelee..v..", "
-        end
-        end
-        a = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buy"..v,true)
-        if a == 1 or a == 2 then
+            if v == "DragonClaw" then  
+                if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","1") == 1 or game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","1") == 2 then
+                    PrintMelee = PrintMelee..v..", "
+                end
+            else
+                if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buy"..v,true) == 1 or game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buy"..v,true) == 2 then
            PrintMelee = PrintMelee..v..", "
         end
         end
+    end
 
         function splitCamelCase(str)
             return str:gsub("([a-z])([A-Z])", "%1 %2") -- Thêm khoảng trắng giữa chữ hoa và chữ thường
