@@ -25,6 +25,18 @@ else
     SpyText = "Spy: Found Leviathan"
 end
 
+--RaceCheck
+RaceAwakenValue = 1
+if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("RaceV4Progress","Check") == 3 then
+    RaceAwakenValue = 4
+    --RaceV3 Check
+elseif game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Wenlocktoad","1") == -2 then
+    RaceAwakenValue = 3
+    --RaceV2 Check
+elseif game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Alchemist") == -2 then
+    RaceAwakenValue = 2
+end
+
 EliteHunterProcess = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("EliteHunter","Progress")
 -----
 PlayerCurrentMelee = ""
@@ -197,7 +209,7 @@ if SendDataAsJson then
                 end
            end
             ---
-    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Total Killed Elite Hunter: "..EliteHunterProcess..", "..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..finalResult:sub(1,-2).." | "
+    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race.."["..tostring(RaceAwakenValue).."]"..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Total Killed Elite Hunter: "..EliteHunterProcess..", "..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..finalResult:sub(1,-2).." | "
            for i,v in pairs(FruitTable2) do
             NameFruit = v
             if table.find(TestTable2,v) then
