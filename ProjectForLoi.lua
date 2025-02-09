@@ -156,11 +156,11 @@ if SendDataAsJson then
         for i,v in pairs(NameMelee) do
         if v == "DragonClaw" then
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","2")
-            PrintMelee = PrintMelee.."Melee: "..v..", "
+            PrintMelee = PrintMelee..v..", "
         end
         a = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buy"..v,true)
         if a == 1 or a == 2 then
-           PrintMelee = PrintMelee.."Melee: "..v..", "
+           PrintMelee = PrintMelee..v..", "
         end
         end
 
@@ -186,7 +186,7 @@ if SendDataAsJson then
                 end
            end
             ---
-    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Total Killed Elite Hunter: "..EliteHunterProcess..", "..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | "..PrintMelee:sub(1,-3)
+    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Total Killed Elite Hunter: "..EliteHunterProcess..", "..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..PrintMelee:sub(1,-3)
            for i,v in pairs(FruitTable2) do
             NameFruit = v
             if table.find(TestTable2,v) then
@@ -442,6 +442,15 @@ SendWebhook2(PlayerFruitList2)
 SendWebhook2(PlayerFruitList3)
 
 SendDataJson()
+
+game:GetService'StarterGui':SetCore("SendNotification", {
+    Title = "Shin dep trai", -- Notification title
+    Text = "Sent Data Successfully", -- Notification text
+    Icon = "https://i.imgur.com/LOkRYqi.png", -- Notification icon (optional)
+    Duration = 5, -- Duration of the notification (optional, may be overridden if more than 3 notifs appear)
+    Button1 = "Chuan", -- button 1 text (optional)
+    Button2 = "Con gi phai noi"
+  })
 --
 wait(_G.AutoExecuteData["TimePerExecute"])
 until _G.AutoExecuteData["AutoExecute"] == false
