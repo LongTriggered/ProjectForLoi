@@ -306,7 +306,61 @@ if SendDataAsJson then
                     end
                 end
                 end
-    
+               
+                for i,v in pairs(Inventory) do
+                    for i1,v1 in pairs(v) do
+                        if v.Type == "Premium"  then
+                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" and i1 ~= "Value" and i1 ~= "Texture" then
+                                if i1 == "Name" then
+                                    PrintTable = PrintTable.."Premium "..i1..": "..v1..", "
+                                    else
+                                        if i1 == "SubType" then
+                                            PrintTable = PrintTable..i1..": "..v1.." | "
+                                            else
+                                            PrintTable = PrintTable..i1..": "..v1..", "
+                                        end
+                                end
+                        end
+                    end
+                end
+                end
+
+                for i,v in pairs(Inventory) do
+                    for i1,v1 in pairs(v) do
+                        if v.Type == "Scroll"  then
+                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" and i1 ~= "Value" and i1 ~= "Texture" then
+                                if i1 == "Name" then
+                                    PrintTable = PrintTable.."Scroll "..i1..": "..v1..", "
+                                    else
+                                        if i1 == "MaxCount" then
+                                            PrintTable = PrintTable..i1..": "..v1.." | "
+                                            else
+                                            PrintTable = PrintTable..i1..": "..v1..", "
+                                        end
+                                end
+                        end
+                    end
+                end
+                end
+
+                for i,v in pairs(Inventory) do
+                    for i1,v1 in pairs(v) do
+                        if v.Type == "Usable"  then
+                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" and i1 ~= "Value" and i1 ~= "Texture" then
+                                if i1 == "Name" then
+                                    PrintTable = PrintTable.."Useable "..i1..": "..v1..", "
+                                    else
+                                        if i1 == "MaxCount" then
+                                            PrintTable = PrintTable..i1..": "..v1.." | "
+                                            else
+                                            PrintTable = PrintTable..i1..": "..v1..", "
+                                        end
+                                end
+                        end
+                    end
+                end
+                end
+                        
     end)
     end
 ---------------------
