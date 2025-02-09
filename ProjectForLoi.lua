@@ -18,13 +18,6 @@ game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
 Fruit = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits",false)
 Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventory")
 
-Spy = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("InfoLeviathan",1)
-if Spy == -1 then
-   SpyText = "Spy: Still in Cooldown"
-else
-    SpyText = "Spy: Found Leviathan"
-end
-
 --RaceCheck
 RaceAwakenValue = 1
 if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("RaceV4Progress","Check") == 3 then
@@ -37,7 +30,15 @@ elseif game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Alchemi
     RaceAwakenValue = 2
 end
 
+if game.PlaceId == 7449423635 then
 EliteHunterProcess = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("EliteHunter","Progress")
+Spy = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("InfoLeviathan",1)
+if Spy == -1 then
+   SpyText = "Spy: Still in Cooldown"
+else
+    SpyText = "Spy: Found Leviathan"
+end
+end
 -----
 PlayerCurrentMelee = ""
 PlayerCurrentMeleeLevel = ""
