@@ -164,6 +164,17 @@ if SendDataAsJson then
         end
         end
 
+        function splitCamelCase(str)
+            return str:gsub("([a-z])([A-Z])", "%1 %2") -- Thêm khoảng trắng giữa chữ hoa và chữ thường
+        end
+        -- Tách các từ trong chuỗi và xử lý chúng
+        local result = {}
+        for word in PrintMelee:gmatch("%S+") do
+            table.insert(result, tostring(splitCamelCase(word)))
+        end
+        
+        -- Kết hợp các từ đã tách lại thành một chuỗi, cách nhau bởi dấu phẩy
+        finalResult = table.concat(result, " ")
     --
             -- ListFruit from FruitStock:
             for i,v in pairs(Fruit) do
@@ -186,7 +197,7 @@ if SendDataAsJson then
                 end
            end
             ---
-    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Total Killed Elite Hunter: "..EliteHunterProcess..", "..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..PrintMelee:sub(1,-3).." | "
+    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Total Killed Elite Hunter: "..EliteHunterProcess..", "..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..finalResult:sub(1,-3).." | "
            for i,v in pairs(FruitTable2) do
             NameFruit = v
             if table.find(TestTable2,v) then
