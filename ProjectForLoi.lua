@@ -20,7 +20,7 @@ Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ge
 
 --RaceCheck
 RaceAwakenValue = 1
-if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("RaceV4Progress","Check") == 3 then
+if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("RaceV4Progress","Check") == 4 then
     RaceAwakenValue = 4
     --RaceV3 Check
 elseif game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Wenlocktoad","1") == -2 then
