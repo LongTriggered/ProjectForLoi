@@ -1,14 +1,14 @@
 repeat wait() until game:IsLoaded()
 repeat wait() until game.Players.LocalPlayer.Character
 repeat wait() until game.Players.LocalPlayer.Backpack
-
---
+--game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 local HttpService = game:GetService("HttpService")
 local player = game.Players.LocalPlayer
 local fileName = player.Name .. "_ServerTime.json"
 
 local getSavedTime = 0
 
+-- Đọc dữ liệu từ file nếu có
 local success, result = pcall(function()
     return HttpService:JSONDecode(readfile(fileName))
 end)
@@ -17,9 +17,12 @@ if success then
     getSavedTime = result
     print("Saved Time: " .. getSavedTime)
 else
+    -- Nếu không có file, tạo file mới
     writefile(fileName, HttpService:JSONEncode(math.floor(workspace.DistributedGameTime + 0.5)))
     print("New file created, starting time saved.")
 end
+
+-- Lưu thời gian khi người chơi rời đi
 
 -- Vòng lặp cập nhật thời gian
 local startTime = math.floor(workspace.DistributedGameTime + 0.5)
@@ -29,9 +32,8 @@ while wait(1) do
     local elapsedTime = math.floor(workspace.DistributedGameTime + 0.5) - previousServerTime
     print("Elapsed Time:", elapsedTime)
 
-    if elapsedTime >= NotifyTime then
+    if elapsedTime >= notifyTime then
         print("Saving progress...")
-        writefile(fileName, HttpService:JSONEncode(0))
         Name = game:GetService('Players').LocalPlayer.Name
 Level = game:GetService('Players').LocalPlayer.Data.Level.Value
 Bounty = game:GetService('Players').LocalPlayer.leaderstats['Bounty/Honor'].Value
@@ -72,6 +74,14 @@ else
     EliteHunterProcess = ""
     SpyText = ""
 end
+        writefile(fileName, HttpService:JSONEncode(0))
+        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
+    else
+        writefile(fileName, HttpService:JSONEncode(elapsedTime))
+    end
+end
+
+
 -----
 PlayerCurrentMelee = ""
 PlayerCurrentMeleeLevel = ""
@@ -120,15 +130,7 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
     end
 end
 end)
-        GetPrintTable()
-        SendDataJson()
-        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
-    else
-        writefile(fileName, HttpService:JSONEncode(elapsedTime))
-    end
-end
 
---game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 -- Get Fruit Data
 if SendPlayerFruitDataAsWebhook then
 pcall(function()
@@ -197,7 +199,6 @@ end)
 end
 -------------
 --Collect Player Data
-function GetPrintTable()
 if SendDataAsJson then
     pcall(function()
         FruitTable2 = {}
@@ -403,7 +404,6 @@ if SendDataAsJson then
                         
     end)
     end
-end
 ---------------------
 -- webhook func
 function SendWebhook1()
@@ -566,3 +566,12 @@ SendWebhook2(PlayerFruitList2)
 SendWebhook2(PlayerFruitList3)
 
 SendDataJson()
+
+game:GetService'StarterGui':SetCore("SendNotification", {
+    Title = "Shin dep trai", -- Notification title
+    Text = "Sent Data Successfully", -- Notification text
+    Icon = "https://i.imgur.com/LOkRYqi.png", -- Notification icon (optional)
+    Duration = 5, -- Duration of the notification (optional, may be overridden if more than 3 notifs appear)
+  })
+--
+wait(_G.AutoExecuteData["TimePerExecute"])
