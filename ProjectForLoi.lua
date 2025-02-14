@@ -22,7 +22,7 @@ else
 end
 
 -- Vòng lặp cập nhật thời gian
-
+local notifyTime = 100
 local startTime = math.floor(workspace.DistributedGameTime + 0.5)
 local previousServerTime = startTime - getSavedTime
 
@@ -30,11 +30,21 @@ while wait(1) do
     local elapsedTime = math.floor(workspace.DistributedGameTime + 0.5) - previousServerTime
     print("Elapsed Time:", elapsedTime)
 
-    if elapsedTime >= NotifyTime then
+    if elapsedTime >= notifyTime then
         print("Saving progress...")
         writefile(fileName, HttpService:JSONEncode(0))
-        ---
-        Name = game:GetService('Players').LocalPlayer.Name
+        GetPlayerDataz()
+        GetPrintTable()
+        SendDataJson()
+        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
+    else
+        writefile(fileName, HttpService:JSONEncode(elapsedTime))
+    end
+end
+
+function GetPlayerDataz()
+--game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
+Name = game:GetService('Players').LocalPlayer.Name
 Level = game:GetService('Players').LocalPlayer.Data.Level.Value
 Bounty = game:GetService('Players').LocalPlayer.leaderstats['Bounty/Honor'].Value
 DevilFruit = game:GetService('Players').LocalPlayer.Data.DevilFruit.Value
@@ -122,17 +132,7 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
     end
 end
 end)
-SendDataJson()
-        ---
-        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
-    else
-        writefile(fileName, HttpService:JSONEncode(elapsedTime))
-    end
 end
-
---game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
-
-
 -- Get Fruit Data
 if SendPlayerFruitDataAsWebhook then
 pcall(function()
@@ -201,6 +201,7 @@ end)
 end
 -------------
 --Collect Player Data
+function GetPrintTable()
 if SendDataAsJson then
     pcall(function()
         FruitTable2 = {}
@@ -406,6 +407,7 @@ if SendDataAsJson then
                         
     end)
     end
+end
 ---------------------
 -- webhook func
 function SendWebhook1()
@@ -568,5 +570,3 @@ SendWebhook2(PlayerFruitList2)
 SendWebhook2(PlayerFruitList3)
 
 SendDataJson()
-
-wait(_G.AutoExecuteData["TimePerExecute"])
