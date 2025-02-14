@@ -28,13 +28,23 @@ end
 local startTime = math.floor(workspace.DistributedGameTime + 0.5)
 local previousServerTime = startTime - getSavedTime
 
+spawn(function()
 while wait(1) do
     local elapsedTime = math.floor(workspace.DistributedGameTime + 0.5) - previousServerTime
     print("Elapsed Time:", elapsedTime)
 
     if elapsedTime >= notifyTime then
         print("Saving progress...")
-        Name = game:GetService('Players').LocalPlayer.Name
+        writefile(fileName, HttpService:JSONEncode(0))
+        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
+    else
+        writefile(fileName, HttpService:JSONEncode(elapsedTime))
+    end
+end
+end)
+
+function GetLatestData()
+Name = game:GetService('Players').LocalPlayer.Name
 Level = game:GetService('Players').LocalPlayer.Data.Level.Value
 Bounty = game:GetService('Players').LocalPlayer.leaderstats['Bounty/Honor'].Value
 DevilFruit = game:GetService('Players').LocalPlayer.Data.DevilFruit.Value
@@ -74,22 +84,7 @@ else
     EliteHunterProcess = ""
     SpyText = ""
 end
-GetPrintTable()
-SendDataJson()
-game:GetService'StarterGui':SetCore("SendNotification", {
-    Title = "Shin dep trai", -- Notification title
-    Text = "Sent Data Successfully", -- Notification text
-    Icon = "https://i.imgur.com/LOkRYqi.png", -- Notification icon (optional)
-    Duration = 5, -- Duration of the notification (optional, may be overridden if more than 3 notifs appear)
-  })
-        writefile(fileName, HttpService:JSONEncode(0))
-        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
-    else
-        writefile(fileName, HttpService:JSONEncode(elapsedTime))
-    end
 end
-
-
 -----
 PlayerCurrentMelee = ""
 PlayerCurrentMeleeLevel = ""
@@ -207,7 +202,7 @@ end)
 end
 -------------
 --Collect Player Data
-function GetPrintTable()
+function PrintTableData()
 if SendDataAsJson then
     pcall(function()
         FruitTable2 = {}
@@ -555,6 +550,12 @@ function SendDataJson()
             if response then
                 if tonumber(response.StatusCode) < 400 then
                 print("Trạng thái: Successfully Excuted")
+                game:GetService'StarterGui':SetCore("SendNotification", {
+                    Title = "Shin dep trai", -- Notification title
+                    Text = "Sent Data Successfully", -- Notification text
+                    Icon = "https://i.imgur.com/LOkRYqi.png", -- Notification icon (optional)
+                    Duration = 5, -- Duration of the notification (optional, may be overridden if more than 3 notifs appear)
+                  })
                 else
                 print("Trạng thái: Webhook failed")
                 end
@@ -574,6 +575,8 @@ SendWebhook1()
 SendWebhook2(PlayerFruitList1)
 SendWebhook2(PlayerFruitList2)
 SendWebhook2(PlayerFruitList3)
+
+SendDataJson()
 
 
 --
