@@ -36,6 +36,9 @@ while wait(1) do
     if elapsedTime >= notifyTime then
         print("Saving progress...")
         writefile(fileName, HttpService:JSONEncode(0))
+        GetLatestData()
+        PrintTableData()
+        SendDataJson()
         previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
     else
         writefile(fileName, HttpService:JSONEncode(elapsedTime))
@@ -575,8 +578,6 @@ SendWebhook1()
 SendWebhook2(PlayerFruitList1)
 SendWebhook2(PlayerFruitList2)
 SendWebhook2(PlayerFruitList3)
-
-SendDataJson()
 
 
 --
