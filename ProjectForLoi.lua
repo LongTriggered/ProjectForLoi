@@ -581,4 +581,3 @@ SendWebhook2(PlayerFruitList3)
 
 
 --
-wait(_G.AutoExecuteData["TimePerExecute"])
