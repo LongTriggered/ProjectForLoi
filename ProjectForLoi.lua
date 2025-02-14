@@ -74,6 +74,14 @@ else
     EliteHunterProcess = ""
     SpyText = ""
 end
+GetPrintTable()
+SendDataJson()
+game:GetService'StarterGui':SetCore("SendNotification", {
+    Title = "Shin dep trai", -- Notification title
+    Text = "Sent Data Successfully", -- Notification text
+    Icon = "https://i.imgur.com/LOkRYqi.png", -- Notification icon (optional)
+    Duration = 5, -- Duration of the notification (optional, may be overridden if more than 3 notifs appear)
+  })
         writefile(fileName, HttpService:JSONEncode(0))
         previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
     else
@@ -199,6 +207,7 @@ end)
 end
 -------------
 --Collect Player Data
+function GetPrintTable()
 if SendDataAsJson then
     pcall(function()
         FruitTable2 = {}
@@ -404,6 +413,7 @@ if SendDataAsJson then
                         
     end)
     end
+end
 ---------------------
 -- webhook func
 function SendWebhook1()
@@ -565,13 +575,6 @@ SendWebhook2(PlayerFruitList1)
 SendWebhook2(PlayerFruitList2)
 SendWebhook2(PlayerFruitList3)
 
-SendDataJson()
 
-game:GetService'StarterGui':SetCore("SendNotification", {
-    Title = "Shin dep trai", -- Notification title
-    Text = "Sent Data Successfully", -- Notification text
-    Icon = "https://i.imgur.com/LOkRYqi.png", -- Notification icon (optional)
-    Duration = 5, -- Duration of the notification (optional, may be overridden if more than 3 notifs appear)
-  })
 --
 wait(_G.AutoExecuteData["TimePerExecute"])
