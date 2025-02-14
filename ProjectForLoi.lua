@@ -22,7 +22,6 @@ else
 end
 
 -- Vòng lặp cập nhật thời gian
-local notifyTime = 100
 local startTime = math.floor(workspace.DistributedGameTime + 0.5)
 local previousServerTime = startTime - getSavedTime
 
@@ -30,21 +29,10 @@ while wait(1) do
     local elapsedTime = math.floor(workspace.DistributedGameTime + 0.5) - previousServerTime
     print("Elapsed Time:", elapsedTime)
 
-    if elapsedTime >= notifyTime then
+    if elapsedTime >= NotifyTime then
         print("Saving progress...")
         writefile(fileName, HttpService:JSONEncode(0))
-        GetPlayerDataz()
-        GetPrintTable()
-        SendDataJson()
-        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
-    else
-        writefile(fileName, HttpService:JSONEncode(elapsedTime))
-    end
-end
-
-function GetPlayerDataz()
---game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
-Name = game:GetService('Players').LocalPlayer.Name
+        Name = game:GetService('Players').LocalPlayer.Name
 Level = game:GetService('Players').LocalPlayer.Data.Level.Value
 Bounty = game:GetService('Players').LocalPlayer.leaderstats['Bounty/Honor'].Value
 DevilFruit = game:GetService('Players').LocalPlayer.Data.DevilFruit.Value
@@ -132,7 +120,15 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
     end
 end
 end)
+        GetPrintTable()
+        SendDataJson()
+        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
+    else
+        writefile(fileName, HttpService:JSONEncode(elapsedTime))
+    end
 end
+
+--game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 -- Get Fruit Data
 if SendPlayerFruitDataAsWebhook then
 pcall(function()
