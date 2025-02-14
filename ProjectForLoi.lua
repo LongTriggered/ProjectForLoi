@@ -1,9 +1,40 @@
 repeat wait() until game:IsLoaded()
 repeat wait() until game.Players.LocalPlayer.Character
 repeat wait() until game.Players.LocalPlayer.Backpack
-repeat 
---game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
-Name = game:GetService('Players').LocalPlayer.Name
+
+--
+local HttpService = game:GetService("HttpService")
+local player = game.Players.LocalPlayer
+local fileName = player.Name .. "_ServerTime.json"
+
+local getSavedTime = 0
+
+local success, result = pcall(function()
+    return HttpService:JSONDecode(readfile(fileName))
+end)
+
+if success then
+    getSavedTime = result
+    print("Saved Time: " .. getSavedTime)
+else
+    writefile(fileName, HttpService:JSONEncode(math.floor(workspace.DistributedGameTime + 0.5)))
+    print("New file created, starting time saved.")
+end
+
+-- Vòng lặp cập nhật thời gian
+
+local startTime = math.floor(workspace.DistributedGameTime + 0.5)
+local previousServerTime = startTime - getSavedTime
+
+while wait(1) do
+    local elapsedTime = math.floor(workspace.DistributedGameTime + 0.5) - previousServerTime
+    print("Elapsed Time:", elapsedTime)
+
+    if elapsedTime >= NotifyTime then
+        print("Saving progress...")
+        writefile(fileName, HttpService:JSONEncode(0))
+        ---
+        Name = game:GetService('Players').LocalPlayer.Name
 Level = game:GetService('Players').LocalPlayer.Data.Level.Value
 Bounty = game:GetService('Players').LocalPlayer.leaderstats['Bounty/Honor'].Value
 DevilFruit = game:GetService('Players').LocalPlayer.Data.DevilFruit.Value
@@ -91,6 +122,16 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
     end
 end
 end)
+SendDataJson()
+        ---
+        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
+    else
+        writefile(fileName, HttpService:JSONEncode(elapsedTime))
+    end
+end
+
+--game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
+
 
 -- Get Fruit Data
 if SendPlayerFruitDataAsWebhook then
@@ -528,12 +569,4 @@ SendWebhook2(PlayerFruitList3)
 
 SendDataJson()
 
-game:GetService'StarterGui':SetCore("SendNotification", {
-    Title = "Shin dep trai", -- Notification title
-    Text = "Sent Data Successfully", -- Notification text
-    Icon = "https://i.imgur.com/LOkRYqi.png", -- Notification icon (optional)
-    Duration = 5, -- Duration of the notification (optional, may be overridden if more than 3 notifs appear)
-  })
---
 wait(_G.AutoExecuteData["TimePerExecute"])
-until _G.AutoExecuteData["AutoExecute"] == false
