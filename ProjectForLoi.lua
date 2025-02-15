@@ -1,52 +1,9 @@
 repeat wait() until game:IsLoaded()
 repeat wait() until game.Players.LocalPlayer.Character
 repeat wait() until game.Players.LocalPlayer.Backpack
+repeat 
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
-local HttpService = game:GetService("HttpService")
-local player = game.Players.LocalPlayer
-local fileName = player.Name .. "_ServerTime.json"
-
-local getSavedTime = 0
-
--- Đọc dữ liệu từ file nếu có
-local success, result = pcall(function()
-    return HttpService:JSONDecode(readfile(fileName))
-end)
-
-if success then
-    getSavedTime = result
-    print("Saved Time: " .. getSavedTime)
-else
-    -- Nếu không có file, tạo file mới
-    writefile(fileName, HttpService:JSONEncode(math.floor(workspace.DistributedGameTime + 0.5)))
-    print("New file created, starting time saved.")
-end
-
--- Lưu thời gian khi người chơi rời đi
-
--- Vòng lặp cập nhật thời gian
-local startTime = math.floor(workspace.DistributedGameTime + 0.5)
-local previousServerTime = startTime - getSavedTime
-
-spawn(function()
-while wait(1) do
-    local elapsedTime = math.floor(workspace.DistributedGameTime + 0.5) - previousServerTime
-    print("Elapsed Time:", elapsedTime)
-
-    if elapsedTime >= notifyTime then
-        print("Saving progress...")
-        writefile(fileName, HttpService:JSONEncode(0))
-        GetLatestData()
-        PrintTableData()
-        SendDataJson()
-        previousServerTime = math.floor(workspace.DistributedGameTime + 0.5)  -- Reset thời gian
-    else
-        writefile(fileName, HttpService:JSONEncode(elapsedTime))
-    end
-end
-end)
-
-function GetLatestData()
+function getAllPlayerData()
 Name = game:GetService('Players').LocalPlayer.Name
 Level = game:GetService('Players').LocalPlayer.Data.Level.Value
 Bounty = game:GetService('Players').LocalPlayer.leaderstats['Bounty/Honor'].Value
@@ -86,7 +43,6 @@ end
 else
     EliteHunterProcess = ""
     SpyText = ""
-end
 end
 -----
 PlayerCurrentMelee = ""
@@ -136,6 +92,7 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
     end
 end
 end)
+end
 
 -- Get Fruit Data
 if SendPlayerFruitDataAsWebhook then
@@ -205,8 +162,7 @@ end)
 end
 -------------
 --Collect Player Data
-function PrintTableData()
-if SendDataAsJson then
+function pasteDataToSend()
     pcall(function()
         FruitTable2 = {}
         PlayerFruitTable2 = {}
@@ -411,7 +367,6 @@ if SendDataAsJson then
                         
     end)
     end
-end
 ---------------------
 -- webhook func
 function SendWebhook1()
@@ -579,5 +534,9 @@ SendWebhook2(PlayerFruitList1)
 SendWebhook2(PlayerFruitList2)
 SendWebhook2(PlayerFruitList3)
 
-
+getAllPlayerData()
+pasteDataToSend()
+SendDataJson()
 --
+wait(_G.AutoExecuteData["TimePerExecute"])
+until _G.AutoExecuteData["AutoExecute"] == false
