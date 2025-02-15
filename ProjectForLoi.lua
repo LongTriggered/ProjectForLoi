@@ -97,6 +97,7 @@ end
 -------------
 --Paste Player Data
 function pasteDataToSend()
+    pcall(function()
         FruitTable2 = {}
         PlayerFruitTable2 = {}
         TestTable2 = {}
@@ -154,6 +155,7 @@ function pasteDataToSend()
             ---
     PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race.." [V"..tostring(RaceAwakenValue).."]"..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Fruit Capacity: "..FruitCap..EliteHunterProcess..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..finalResult:sub(1,-2).." | "
            for i,v in pairs(FruitTable2) do
+            NameFruit = v
             if table.find(TestTable2,v) then
                 PrintTable = PrintTable.."Fruit Name: "..NameFruit..", "
                 for l,k in pairs(PlayerFruitData) do
@@ -170,8 +172,7 @@ function pasteDataToSend()
                     end
                 end
             else
-                
-               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Rarity: "..UnhaveRarity..", ".."Count: 0"..", ".."Mastery: - | "
+               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Count: 0"..", ".."Mastery: - | "
            end
         end
     
@@ -298,13 +299,13 @@ function pasteDataToSend()
                 end
                 end
                         
+    end)
     end
 ---------------------
 
 ---Function Misc
 function FPS_BOOST()
     setfpscap(500)
-   -- game.ReplicatedStorage.Assets:Destroy()
     local decalsyeeted = true
     local g = game
     local w = g.Workspace
