@@ -171,11 +171,7 @@ function pasteDataToSend()
                     end
                 end
             else
-                if type(v) == "string" then
-                    NameFruit = v
-                    elseif type(v) == "number" then
-                    UnhaveRarity = v
-                    end
+                
                PrintTable = PrintTable.."Fruit Name: "..v..", ".."Rarity: "..UnhaveRarity..", ".."Count: 0"..", ".."Mastery: - | "
            end
         end
