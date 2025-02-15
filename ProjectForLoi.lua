@@ -161,7 +161,7 @@ function pasteDataToSend()
                 for l,k in pairs(PlayerFruitData) do
                     if k.Name == NameFruit then
                         for a,b in pairs(k) do
-                            if a ~= "AwakeningData" and a ~= "Equipped" and a~= "MasteryRequirements" and a ~= "Type" and a~= "Name" and a ~= "Value" and a ~= "Rarity" then
+                            if a ~= "AwakeningData" and a ~= "Equipped" and a~= "MasteryRequirements" and a ~= "Type" and a~= "Name" and a ~= "Value" then
                                 if a~= "Mastery" then
                                 PrintTable = PrintTable..a..": "..b..", "
                                 else
