@@ -136,8 +136,10 @@ function pasteDataToSend()
             for i,v in pairs(Fruit) do
                 for a,b in pairs(v) do
                        if a == "Name" or a == "Rarity" then
+                        if b ~= "Dragon-Dragon" then
                     table.insert(FruitTable2,b)
                         end
+                    end
                 end
             end
             ---
