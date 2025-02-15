@@ -1,7 +1,6 @@
 repeat wait() until game:IsLoaded()
 repeat wait() until game.Players.LocalPlayer.Character
 repeat wait() until game.Players.LocalPlayer.Backpack
-repeat 
 --game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
 function getAllPlayerData()
 Name = game:GetService('Players').LocalPlayer.Name
@@ -461,9 +460,80 @@ end
 --Run Function
 SendWebhook1()
 
+if G.AutoExecuteData["AutoExecute"] == false then
 getAllPlayerData()
 pasteDataToSend()
 SendDataJson()
---
-wait(_G.AutoExecuteData["TimePerExecute"])
-until _G.AutoExecuteData["AutoExecute"] == false
+end
+------ Auto Execute 
+TimeSaveFileName = game.Players.LocalPlayer.Name.."_ServerTime"..".json"
+
+function readFile()
+    local success, result = pcall(function()
+        return game:GetService('HttpService'):JSONDecode(readfile(TimeSaveFileName))
+    end)
+    if success then
+        return result
+    else return false
+    end
+end
+
+function GetSavedTime() 
+    if readFile() ~= false then
+    return game:GetService('HttpService'):JSONDecode(readfile(TimeSaveFileName))
+    else
+    return false
+    end
+end
+
+function SaveTime(value)
+    writefile(TimeSaveFileName, game:GetService('HttpService'):JSONEncode(value))
+end
+
+game:GetService('Players').PlayerRemoving:Connect(function(player)
+    if player.Name == game:GetService('Players').LocalPlayer.Name then 
+            writefile(TimeSaveFileName, game:GetService('HttpService'):JSONEncode(CountingTime))
+        end
+end)
+CountingTime = 0
+ExecutedScriptTime = math.floor(workspace.DistributedGameTime+0.5)
+
+if ExecutedScriptTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] then
+    print('Sent Data')
+    getAllPlayerData()
+    pasteDataToSend()
+    SendDataJson()
+end
+
+while _G.AutoExecuteData["NotifyTime"] do
+    wait(1)
+    local getSavedTimeStatus = GetSavedTime()
+    local CurrentGameTime = math.floor(workspace.DistributedGameTime+0.5)
+
+    if getSavedTimeStatus == false then
+
+    CountingTime = ( CurrentGameTime ) - ( (_G.AutoExecuteData["NotifyTime"]) * ( CurrentGameTime // (_G.AutoExecuteData["NotifyTime"])  )  )
+    print("Current Time1: "..CountingTime.." (".." 0 Saved Time)".." + ".."("..CurrentGameTime.." Server Time)")
+
+    if CountingTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] then
+        print('Sent Data')
+        getAllPlayerData()
+        pasteDataToSend()
+        SendDataJson()
+    end
+    else
+
+    CountingTime = CurrentGameTime - ExecutedScriptTime + getSavedTimeStatus
+    print("Current Time2: "..CountingTime.." ("..GetSavedTime().." Saved Time)".." + ".."("..CurrentGameTime.." Server Time)")
+
+    if CountingTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] then
+        print('Sent Data')
+        getAllPlayerData()
+        pasteDataToSend()
+        SendDataJson()
+        SaveTime(0)
+        CountingTime = 0
+        ExecutedScriptTime = CurrentGameTime
+    end
+end
+end
