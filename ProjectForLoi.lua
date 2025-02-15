@@ -152,6 +152,11 @@ function pasteDataToSend()
                             table.insert(PlayerFruitData,v)
                 end
            end
+           ---Insert Dragon
+            table.insert(FruitTable2,"Dragon (West)-Dragon (West)")
+            table.insert(FruitTable2,4)
+            table.insert(FruitTable2,"Dragon (East)-Dragon (East)")
+            table.insert(FruitTable2,4)
             ---
     PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race.." [V"..tostring(RaceAwakenValue).."]"..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Fruit Capacity: "..FruitCap..EliteHunterProcess..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..finalResult:sub(1,-2).." | "
            for i,v in ipairs(FruitTable2) do
@@ -173,7 +178,7 @@ function pasteDataToSend()
                     end
                 end
             else
-               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Rarity: "..FruitTable2[i+1].."Count: 0"..", ".."Mastery: - | "
+               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Rarity: "..FruitTable2[i+1]..", ".."Count: 0"..", ".."Mastery: - | "
            end
 
         end
