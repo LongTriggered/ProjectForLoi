@@ -320,6 +320,9 @@ function pasteDataToSend()
 ---Function Misc
 function FPS_BOOST()
     setfpscap(500)
+    if game.ReplicatedStorage:FindFirstChild("Assets") then
+    game.ReplicatedStorage:FindFirstChild("Assets"):Destroy()
+    end
     local decalsyeeted = true
     local g = game
     local w = g.Workspace
@@ -357,8 +360,11 @@ function FPS_BOOST()
             e.Enabled = false
         end
     end
+    _G.EnabledFpsBoost = true
 end
+if not _G.EnabledFpsBoost or _G.EnabledFpsBoost == false then
 FPS_BOOST()
+end
 -- webhook func
 function SendWebhook1()
     if SendPlayerDataAsWebhook then
