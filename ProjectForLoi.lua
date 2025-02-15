@@ -499,7 +499,7 @@ CountingTime = 0
 ExecutedScriptTime = math.floor(workspace.DistributedGameTime+0.5)
 
 
-if ExecutedScriptTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] and _G.AutoExecuteData["AutoExecute"] == false then
+if ExecutedScriptTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] and _G.AutoExecuteData["AutoExecute"] == true then
     print('Sent Data, method: Servertime reached NotifyTime ')
     getAllPlayerData()
     pasteDataToSend()
