@@ -138,10 +138,18 @@ function pasteDataToSend()
                        if a == "Name" or a == "Rarity" then
                         if b ~= "Dragon-Dragon" then
                     table.insert(FruitTable2,b)
+                        else
+                            ---Insert Dragon
+                            table.insert(FruitTable2,"Dragon (West)-Dragon (West)")
+                            table.insert(FruitTable2,4)
+                            table.insert(FruitTable2,"Dragon (East)-Dragon (East)")
+                            table.insert(FruitTable2,4)
                         end
                     end
                 end
             end
+             
+             
             ---
             for i,v in pairs(Inventory) do
                 if table.find(FruitTable2,v.Name) then               
@@ -154,11 +162,7 @@ function pasteDataToSend()
                             table.insert(PlayerFruitData,v)
                 end
            end
-           ---Insert Dragon
-            table.insert(FruitTable2,"Dragon (West)-Dragon (West)")
-            table.insert(FruitTable2,4)
-            table.insert(FruitTable2,"Dragon (East)-Dragon (East)")
-            table.insert(FruitTable2,4)
+          
             ---
     PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race.." [V"..tostring(RaceAwakenValue).."]"..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Fruit Capacity: "..FruitCap..EliteHunterProcess..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..finalResult:sub(1,-2).." | "
            for i,v in ipairs(FruitTable2) do
