@@ -505,7 +505,7 @@ if ExecutedScriptTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] then
     SendDataJson()
 end
 
-while _G.AutoExecuteData["NotifyTime"] do
+while _G.AutoExecuteData["AutoExecute"] do
     wait(1)
     local getSavedTimeStatus = GetSavedTime()
     local CurrentGameTime = math.floor(workspace.DistributedGameTime+0.5)
