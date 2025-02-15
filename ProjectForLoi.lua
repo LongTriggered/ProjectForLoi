@@ -310,9 +310,7 @@ function pasteDataToSend()
 ---Function Misc
 function FPS_BOOST()
     setfpscap(500)
-    if game:GetService("ReplicatedStorage").Assets then
-    game.ReplicatedStorage.Assets:Destroy()
-    end
+   -- game.ReplicatedStorage.Assets:Destroy()
     local decalsyeeted = true
     local g = game
     local w = g.Workspace
