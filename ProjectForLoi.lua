@@ -154,7 +154,8 @@ function pasteDataToSend()
            end
             ---
     PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race.." [V"..tostring(RaceAwakenValue).."]"..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Fruit Capacity: "..FruitCap..EliteHunterProcess..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..finalResult:sub(1,-2).." | "
-           for i,v in pairs(FruitTable2) do
+           for i,v in ipairs(FruitTable2) do
+            if type(v) == "string" then
             NameFruit = v
             if table.find(TestTable2,v) then
                 PrintTable = PrintTable.."Fruit Name: "..NameFruit..", "
@@ -172,9 +173,11 @@ function pasteDataToSend()
                     end
                 end
             else
-               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Count: 0"..", ".."Mastery: - | "
+               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Rarity: "..FruitTable2[i+1].."Count: 0"..", ".."Mastery: - | "
            end
+
         end
+    end
     
                for i,v in pairs(Inventory) do
                         for i1,v1 in pairs(v) do
