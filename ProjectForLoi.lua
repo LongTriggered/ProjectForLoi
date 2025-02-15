@@ -93,75 +93,8 @@ for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()
 end
 end)
 end
-
--- Get Fruit Data
-if SendPlayerFruitDataAsWebhook then
-pcall(function()
-    FruitTable = {}
-    PlayerFruitTable = {}
-        for i,v in pairs(Fruit) do
-            for a,b in pairs(v) do
-                   if a == "Name" then
-                table.insert(FruitTable,b)
-                    end
-            end
-        end
-     ---get Fruit in Inventory
-           for i,v in pairs(Inventory) do
-                if table.find(FruitTable,v.Name) then
-                    for i1,v1 in pairs(v) do
-                        if i1 == "Count" then
-                            table.insert(PlayerFruitTable,v.Name.." ["..v1.."]")
-                        end
-                    end
-                end
-           end
---Function chia bang lam 3
- totalElements = #PlayerFruitTable
- partSize = math.ceil(totalElements / 3)  -- Chia tổng số phần tử cho 3 và làm tròn lên
-
--- Chia bảng thành 3 phần
- firstPart = {}
- secondPart = {}
- thirdPart = {}
-
--- Phần đầu tiên
-for i = 1, partSize do
-    table.insert(firstPart, PlayerFruitTable[i])
-end
-
--- Phần thứ hai
-for i = partSize + 1, 2 * partSize do
-    if PlayerFruitTable[i] then
-        table.insert(secondPart, PlayerFruitTable[i])
-    end
-end
-
--- Phần thứ ba
-for i = 2 * partSize + 1, totalElements do
-    if PlayerFruitTable[i] then
-        table.insert(thirdPart, PlayerFruitTable[i])
-    end
-end
-
- PlayerFruitList1 = "•Fruit Inventory:\n"
-    for _, player in ipairs(firstPart) do
-        PlayerFruitList1 = PlayerFruitList1 ..  player .. "\n"
-    end
-
- PlayerFruitList2 = "•Fruit Inventory:\n"
-    for _, player in ipairs(secondPart) do
-        PlayerFruitList2 = PlayerFruitList2 ..  player .. "\n"
-    end
-
- PlayerFruitList3 = "•Fruit Inventory:\n"
-    for _, player in ipairs(thirdPart) do
-        PlayerFruitList3 = PlayerFruitList3 ..  player .. "\n"
-    end
-end)
-end
 -------------
---Collect Player Data
+--Paste Player Data
 function pasteDataToSend()
     pcall(function()
         FruitTable2 = {}
@@ -448,7 +381,6 @@ end
 end
 
 function SendWebhook2(msg)
-    if SendPlayerFruitDataAsWebhook then
     Content = '';
     Embed = {
         title = msg;
@@ -464,7 +396,6 @@ function SendWebhook2(msg)
         Body = game:GetService'HttpService':JSONEncode( { content = Content; embeds = { Embed } } );
     };
     end
-end
 
 function SendDataJson()
     if SendDataAsJson then
@@ -529,10 +460,6 @@ end
 
 --Run Function
 SendWebhook1()
-
-SendWebhook2(PlayerFruitList1)
-SendWebhook2(PlayerFruitList2)
-SendWebhook2(PlayerFruitList3)
 
 getAllPlayerData()
 pasteDataToSend()
