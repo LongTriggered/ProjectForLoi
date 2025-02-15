@@ -42,8 +42,8 @@ else
     SpyText = ", Spy: Found Leviathan"
 end
 else
-    EliteHunterProcess = "Total Killed Elite Hunter: `Không tìm thấy`"
-    SpyText = "Spy: `Không tìm thấy`"
+    EliteHunterProcess = ", Total Killed Elite Hunter: `Không tìm thấy`"
+    SpyText = ", Spy: `Không tìm thấy`"
 end
 -----
 PlayerCurrentMelee = ""
