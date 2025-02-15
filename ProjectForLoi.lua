@@ -460,7 +460,7 @@ end
 --Run Function
 SendWebhook1()
 
-if G.AutoExecuteData["AutoExecute"] == false then
+if _G.AutoExecuteData["AutoExecute"] == false then
 getAllPlayerData()
 pasteDataToSend()
 SendDataJson()
