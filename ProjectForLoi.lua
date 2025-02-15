@@ -135,7 +135,7 @@ function pasteDataToSend()
             -- ListFruit from FruitStock:
             for i,v in pairs(Fruit) do
                 for a,b in pairs(v) do
-                       if a == "Name" then
+                       if a == "Name" or a == "Rarity" then
                     table.insert(FruitTable2,b)
                         end
                 end
@@ -155,7 +155,11 @@ function pasteDataToSend()
             ---
     PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race.." [V"..tostring(RaceAwakenValue).."]"..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Fruit Capacity: "..FruitCap..EliteHunterProcess..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..finalResult:sub(1,-2).." | "
            for i,v in pairs(FruitTable2) do
+            if type(v) == "string" then
             NameFruit = v
+            else
+            UnhaveRarity = v
+            end
             if table.find(TestTable2,v) then
                 PrintTable = PrintTable.."Fruit Name: "..NameFruit..", "
                 for l,k in pairs(PlayerFruitData) do
@@ -172,7 +176,7 @@ function pasteDataToSend()
                     end
                 end
             else
-               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Count: 0"..", ".."Mastery: - | "
+               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Rarity: "..UnhaveRarity..", ".."Count: 0"..", ".."Mastery: - | "
            end
         end
     
