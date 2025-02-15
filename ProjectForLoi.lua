@@ -97,7 +97,6 @@ end
 -------------
 --Paste Player Data
 function pasteDataToSend()
-    pcall(function()
         FruitTable2 = {}
         PlayerFruitTable2 = {}
         TestTable2 = {}
@@ -299,7 +298,6 @@ function pasteDataToSend()
                 end
                 end
                         
-    end)
     end
 ---------------------
 
