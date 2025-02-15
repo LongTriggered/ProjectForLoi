@@ -464,6 +464,7 @@ if _G.AutoExecuteData["AutoExecute"] == false then
 getAllPlayerData()
 pasteDataToSend()
 SendDataJson()
+print('Sending Data, method: Non AutoExecute')
 end
 ------ Auto Execute 
 TimeSaveFileName = game.Players.LocalPlayer.Name.."_ServerTime"..".json"
@@ -500,7 +501,7 @@ ExecutedScriptTime = math.floor(workspace.DistributedGameTime+0.5)
 
 
 if ExecutedScriptTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] and _G.AutoExecuteData["AutoExecute"] == true then
-    print('Sent Data, method: Servertime reached NotifyTime ')
+    print('Sending Data, method: Servertime reached NotifyTime ')
     getAllPlayerData()
     pasteDataToSend()
     SendDataJson()
@@ -517,7 +518,7 @@ while _G.AutoExecuteData["AutoExecute"] do
     print("Current Time1: "..CountingTime.." (".." 0 Saved Time)".." + ".."("..CurrentGameTime.." Server Time)")
 
     if CountingTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] then
-        print('Sent Data, method: no save file')
+        print('Sending Data, method: no save file')
         getAllPlayerData()
         pasteDataToSend()
         SendDataJson()
@@ -528,7 +529,7 @@ while _G.AutoExecuteData["AutoExecute"] do
     print("Current Time2: "..CountingTime.." ("..GetSavedTime().." Saved Time)".." + ".."("..CurrentGameTime.." Server Time)")
 
     if CountingTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] then
-        print('Sent Data, method: saved file')
+        print('Sending Data, method: saved file')
         getAllPlayerData()
         pasteDataToSend()
         SendDataJson()
