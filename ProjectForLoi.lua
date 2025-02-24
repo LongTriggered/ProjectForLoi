@@ -1,542 +1,255 @@
 repeat wait() until game:IsLoaded()
-repeat wait() until game.Players.LocalPlayer.Character
-repeat wait() until game.Players.LocalPlayer.Backpack
---game.Players.LocalPlayer.PlayerGui.Main.DragonSelection.Root.DragonSelectionMenu.Enabled = false
-function getAllPlayerData()
-Name = game:GetService('Players').LocalPlayer.Name
-Level = game:GetService('Players').LocalPlayer.Data.Level.Value
-Bounty = game:GetService('Players').LocalPlayer.leaderstats['Bounty/Honor'].Value
-DevilFruit = game:GetService('Players').LocalPlayer.Data.DevilFruit.Value
-Race = game:GetService('Players').LocalPlayer.Data.Race.Value
-Fragments = game:GetService('Players').LocalPlayer.Data.Fragments.Value
-Beli = game:GetService('Players').LocalPlayer.Data.Beli.Value
-Valor = game:GetService('Players').LocalPlayer.Data.Valor.Value
-FruitCap = game:GetService('Players').LocalPlayer.Data.FruitCap.Value
---Remote Event
+repeat wait() until game:GetService('Players').LocalPlayer.Character
+repeat wait() until game:GetService('Players').LocalPlayer.Backpack
+--Needed
 game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
 game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
 
-Fruit = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits",false)
-Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventory")
---CousinTime = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin", "Buy") --981391330
+local Sea = 0
+if game.PlaceId == 2753915549 then
+    Sea = 1
+elseif game.PlaceId == 4442272183 then
+    Sea = 2
+elseif game.PlaceId == 7449423635 then
+	Sea = 3
+end
+Player = game:GetService('Players').LocalPlayer
 
---RaceCheck
-RaceAwakenValue = 1
-if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("RaceV4Progress","Check") == 4 then
-    RaceAwakenValue = 4
-    --RaceV3 Check
-elseif game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Wenlocktoad","1") == -2 then
-    RaceAwakenValue = 3
-    --RaceV2 Check
-elseif game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Alchemist") == -2 then
-    RaceAwakenValue = 2
+function getCharacter()
+    CharacterReturn = game:GetService('Players').LocalPlayer.Character or game:GetService('Players').LocalPlayer.CharacterAdded:Wait()
+    return CharacterReturn
 end
 
-if game.PlaceId == 7449423635 then
-    Sea3 = true
-EliteHunterProcess = ", Total Killed Elite Hunter: "..game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("EliteHunter","Progress")
-Spy = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("InfoLeviathan",1)
-if Spy == -1 then
-   SpyText = ", Spy: Still in Cooldown"
-else
-    SpyText = ", Spy: Found Leviathan"
+function getData()
+    return  {
+        data = {
+                player_info = {
+                    ["Player Name"]       = Player.Name,
+                    ["Level"]      = tostring(Player.Data.Level.Value),
+                    ["Bounty"]     = tostring(Player.leaderstats['Bounty/Honor'].Value),
+                    ["Race"]       = tostring(Player.Data.Race.Value..getRaceLevel()),
+                    ["Fragments"]   = tostring(Player.Data.Fragments.Value),
+                    ["Beli"]       = tostring(Player.Data.Beli.Value),
+                    ["Valor Level"]     = tostring(Player.Data.Valor.Value),
+                    ["Fruit Capacity"]   = tostring(Player.Data.FruitCap.Value),
+                    ["Total Killed Elite Hunter"] = tostring(checkEliteHunter()),
+                    ["Spy"] = tostring(checkSpy()),
+                    ["Combo"] = getCombo()
+                            },
+                melees_info = getAllMelee(),
+                items_info  = getItem(),
+                fruits_info = getFruitInventory(),
+                time        = os.time()
+                }     
+            }
 end
-else
-    EliteHunterProcess = ", Total Killed Elite Hunter: `Không tìm thấy`"
-    SpyText = ", Spy: `Không tìm thấy`"
-end
------
-PlayerCurrentMelee = ""
-PlayerCurrentMeleeLevel = ""
 
-PlayerCurrentSword = ""
-PlayerCurrentSwordLevel = ""
-
-PlayerCurrentFruit = ""
-PlayerCurrentFruitLevel = ""
-
-PlayerCurrentGun = ""
-PlayerCurrentGunLevel = ""
-pcall(function()
-for i ,v in pairs(game:GetService('Players').LocalPlayer.Backpack:GetChildren()) do
-    if v:IsA("Tool") then
-        if v.ToolTip == "Melee" then
-            PlayerCurrentMelee = v.Name
-            PlayerCurrentMeleeLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
-        elseif v.ToolTip == "Blox Fruit" then
-            PlayerCurrentFruit = v.Name
-            PlayerCurrentFruitLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
-        elseif v.ToolTip == "Sword" then
-            PlayerCurrentSword = v.Name
-            PlayerCurrentSwordLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
-        elseif v.ToolTip == "Gun" then
-            PlayerCurrentGun = v.Name
-            PlayerCurrentGunLevel = game:GetService('Players').LocalPlayer.Backpack[v.Name].Level.Value
-        end
+function getRaceLevel()
+    local RaceV4     = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("RaceV4Progress","Check")
+    local RaceV3     = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Wenlocktoad","1")
+    local RaceV2     = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Alchemist")
+    if RaceV4 == 4 then
+        return " [V4]"                
+    elseif RaceV3 == -2 then
+        return " [V3]"
+    elseif RaceV2 == -2 then
+        return " [V2]"                
+    else
+        return " [V1]"                
     end
 end
-for i ,v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()) do
-    if v:IsA("Tool") then
-        if v.ToolTip == "Melee" then
-            PlayerCurrentMelee = v.Name
-            PlayerCurrentMeleeLevel = game:GetService('Players').LocalPlayer.Character[v.Name].Level.Value
-        elseif v.ToolTip == "Blox Fruit" then
-            PlayerCurrentFruit = v.Name
-            PlayerCurrentFruitLevel = game:GetService('Players').LocalPlayer.Character[v.Name].Level.Value
-        elseif v.ToolTip == "Sword" then
-            PlayerCurrentSword = v.Name
-            PlayerCurrentSwordLevel = game:GetService('Players').LocalPlayer.Character[v.Name].Level.Value
-        elseif v.ToolTip == "Gun" then
-            PlayerCurrentGun = v.Name
-            PlayerCurrentGunLevel = game:GetService('Players').LocalPlayer.Character[v.Name].Level.Value
-        end
-    end
-end
-end)
-end
--------------
---Paste Player Data
-function pasteDataToSend()
-    pcall(function()
-        FruitTable2 = {}
-        PlayerFruitTable2 = {}
-        TestTable2 = {}
-        PlayerFruitData = {}
 
-        ---Get Player Melee
-        PrintMelee = ""
-        NameMelee = {"BlackLeg","Electro","FishmanKarate","DragonClaw","Superhuman","DeathStep","SharkmanKarate","ElectricClaw","DragonTalon","Godhuman","SanguineArt"}
-        for i,v in pairs(NameMelee) do
-            if v == "DragonClaw" then  
-                local a = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","1") 
-                if a == 1 or a == 2 then
-                    PrintMelee = PrintMelee..v..", "
-                end
-            else
-                local a = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buy"..v,true)
-            if a == 1 or a == 2 then
-           PrintMelee = PrintMelee..v..", "
-        end
-        end
-    end
+function getInventory()
+    local Inventory = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventory")
+    return Inventory
+end
 
-        function splitCamelCase(str)
-            return str:gsub("([a-z])([A-Z])", "%1 %2") -- Thêm khoảng trắng giữa chữ hoa và chữ thường
-        end
-        -- Tách các từ trong chuỗi và xử lý chúng
-        local result = {}
-        for word in PrintMelee:gmatch("%S+") do
-            table.insert(result, tostring(splitCamelCase(word)))
-        end
-        
-        -- Kết hợp các từ đã tách lại thành một chuỗi, cách nhau bởi dấu phẩy
-        finalResult = table.concat(result, " ")
-    --
-            -- ListFruit from FruitStock:
-            for i,v in pairs(Fruit) do
-                for a,b in pairs(v) do
-                       if a == "Name" or a == "Rarity" then
-                        if b ~= "Dragon-Dragon" then
-                    table.insert(FruitTable2,b)
-                        else
-                            ---Insert Dragon
-                            table.insert(FruitTable2,"Dragon (West)-Dragon (West)")
-                            table.insert(FruitTable2,4)
-                            table.insert(FruitTable2,"Dragon (East)-Dragon (East)")
-                            table.insert(FruitTable2,4)
-                        end
-                    end
-                end
+function getFruitStock()
+    local Fruit = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits",false)
+    return Fruit
+end
+
+function getCombo()
+    local ComboTable = {
+        Melee = {
+            Name = "",
+            Mastery = ""
+        },
+        BloxFruit = {
+            Name = "",
+            Mastery = ""
+        },
+        Sword = {
+            Name = "",
+            Mastery = ""
+        },
+        Gun = {
+            Name = "",
+            Mastery = ""
+        }
+    }
+    
+    --Check in Backpack
+    for i ,v in pairs(Player.Backpack:GetChildren()) do
+        if v:IsA("Tool") then
+            if v.ToolTip == "Melee" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Sword" or v.ToolTip == "Gun" then
+                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Name =  v.Name
+                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Mastery =  tostring(Player.Backpack[v.Name].Level.Value)
             end
-             
-             
-            ---
-            for i,v in pairs(Inventory) do
-                if table.find(FruitTable2,v.Name) then               
-                    table.insert(TestTable2,v.Name)
-                end
+        end
+    end
+        --Check in Character
+    for i ,v in pairs(getCharacter():GetChildren()) do
+        if v:IsA("Tool") then
+            if v.ToolTip == "Melee" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Sword" or v.ToolTip == "Gun" then
+                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Name =  v.Name
+                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Mastery =  tostring(Player.Backpack[v.Name].Level.Value)
             end
-            ---
-            for i,v in pairs(Inventory) do
-                if table.find(FruitTable2,v.Name) then               
-                            table.insert(PlayerFruitData,v)
-                end
-           end
-          
-            ---
-    PrintTable = "Player Name: "..Name..", ".."Level: "..Level..", ".."Bounty: "..Bounty..", ".."Race: "..Race.." [V"..tostring(RaceAwakenValue).."]"..", ".."Fragments: "..Fragments..", ".."Beli: "..Beli..", ".."Valor Level: "..Valor..", ".."Fruit Capacity: "..FruitCap..EliteHunterProcess..SpyText.." | ".."CurrentMelee: "..PlayerCurrentMelee..", ".."Mastery: "..PlayerCurrentMeleeLevel.." | ".."CurrentBloxFruit: "..PlayerCurrentFruit..", ".."Mastery: "..PlayerCurrentFruitLevel.." | ".."CurrentSword: "..PlayerCurrentSword..", ".."Mastery: "..PlayerCurrentSwordLevel.." | ".."CurrentGun: "..PlayerCurrentGun..", ".."Mastery: "..PlayerCurrentGunLevel.." | ".."Melee: "..finalResult:sub(1,-2).." | "
-           for i,v in ipairs(FruitTable2) do
-            if type(v) == "string" then
-            NameFruit = v
-            if table.find(TestTable2,v) then
-                PrintTable = PrintTable.."Fruit Name: "..NameFruit..", "
-                for l,k in pairs(PlayerFruitData) do
-                    if k.Name == NameFruit then
-                        for a,b in pairs(k) do
-                            if a ~= "AwakeningData" and a ~= "Equipped" and a~= "MasteryRequirements" and a ~= "Type" and a~= "Name" and a ~= "Value" then
-                                if a~= "Mastery" then
-                                PrintTable = PrintTable..a..": "..b..", "
-                                else
-                                    PrintTable = PrintTable..a..": "..b.." | "
-                                end
-                            end
-                        end
-                    end
-                end
-            else
-               PrintTable = PrintTable.."Fruit Name: "..v..", ".."Rarity: "..FruitTable2[i+1]..", ".."Count: 0"..", ".."Mastery: - | "
-           end
-
         end
     end
     
-               for i,v in pairs(Inventory) do
-                        for i1,v1 in pairs(v) do
-                            if v.Type == "Sword"  then
-                                if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
-                                    if i1 == "Name" then
-                                        PrintTable = PrintTable.."Sword "..i1..": "..v1..", "
-                                        else
-                                            if i1 == "Mastery" then
-                                                PrintTable = PrintTable..i1..": "..v1.." | "
-                                                else
-                                                PrintTable = PrintTable..i1..": "..v1..", "
-                                            end
-                                    end
-                            end
-                        end
-                    end
-               end
-               for i,v in pairs(Inventory) do
-                for i1,v1 in pairs(v) do
-                    if v.Type == "Gun"  then
-                        if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
-                            if i1 == "Name" then
-                                PrintTable = PrintTable.."Gun "..i1..": "..v1..", "
-                                else
-                                    if i1 == "Mastery" then
-                                        PrintTable = PrintTable..i1..": "..v1.." | "
-                                        else
-                                        PrintTable = PrintTable..i1..": "..v1..", "
-                                    end
-                            end
-                    end
-                end
-            end
+    -- function getCurrentCombo()
+    --     local combo = {}
+    --     for _, v in ipairs({"Melee", "Fruit", "Sword", "Gun"}) do
+    --         combo["PlayerCurrent"..v], combo["PlayerCurrent"..v.."Level"] = "", ""
+    --     end
+        
+    --     for _, c in pairs({game.Players.LocalPlayer.Backpack, getCharacter()}) do
+    --         for _, t in pairs(c:GetChildren()) do
+    --             if t:IsA("Tool") then
+    --                 local tip = t.ToolTip == "Blox Fruit" and "Fruit" or t.ToolTip
+    --                 if combo["PlayerCurrent"..tip] then
+    --                     combo["PlayerCurrent"..tip], combo["PlayerCurrent"..tip.."Level"] = t.Name, t.Level.Value
+    --                 end
+    --             end
+    --         end
+    --     end
+    --     return combo
+    -- end
+
+    return ComboTable
+end
+
+function getAllMelee()
+    local listAchievedMelee = {}
+    local listMelee = {"BlackLeg","Electro","FishmanKarate","DragonClaw","Superhuman","DeathStep","SharkmanKarate","ElectricClaw","DragonTalon","Godhuman","SanguineArt"}
+
+    for i,v in ipairs(listMelee) do
+        local a = (v == "DragonClaw") and game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward", "DragonClaw", "1") or game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buy" .. v, true)
+        if a == 1 or a == 2 then
+            table.insert(listAchievedMelee, {Name = v})
+        else
+            print('khong co '..v)
+        end
+    end
+    return listAchievedMelee
+end
+
+function getFruitInventory()
+    local allfruitstock, allfruitstockname, allplayerfruit, allplayerfruitname, mixedTable = {}, {}, {}, {}, {}
+
+    for i,v in pairs(getFruitStock()) do -- Get Fruits in FruitStock
+        if  v.Name == "Dragon-Dragon" then
+            table.insert(allfruitstock, {Name = "Dragon (West)-Dragon (West)" ,Rarity = "4"})
+            table.insert(allfruitstock, {Name = "Dragon (East)-Dragon (East)", Rarity = "4"})
+            table.insert(allfruitstockname,"Dragon (West)-Dragon (West)" )
+            table.insert(allfruitstockname,"Dragon (East)-Dragon (East)")
+        else
+            table.insert(allfruitstock, {Name = v.Name, Rarity = tostring(v.Rarity)})
+            table.insert(allfruitstockname,v.Name)
+        end
+    end
+
+    for i,v in pairs(getInventory()) do     -- Get Fruit in Inventory
+        if  table.find(allfruitstockname,v.Name) then
+            table.insert(allplayerfruit,v)
+            table.insert(allplayerfruitname,v.Name)
        end
-                for i,v in pairs(Inventory) do
-                    for i1,v1 in pairs(v) do
-                        if v.Type == "Wear"  then
-                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
-                                if i1 == "Name" then
-                                    PrintTable = PrintTable.."Accessory "..i1..": "..v1..", "
-                                    else
-                                        if i1 == "Mastery" then
-                                            PrintTable = PrintTable..i1..": "..v1.." | "
-                                            else
-                                            PrintTable = PrintTable..i1..": "..v1..", "
-                                        end
-                                end
-                        end
-                    end
-                end
-                end
-                for i,v in pairs(Inventory) do
-                    for i1,v1 in pairs(v) do
-                        if v.Type == "Material"  then
-                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" then
-                                if i1 == "Name" then
-                                    PrintTable = PrintTable.."Material "..i1..": "..v1..", "
-                                    else
-                                        if i1 == "MaxCount" then
-                                            PrintTable = PrintTable..i1..": "..v1.." | "
-                                            else
-                                            PrintTable = PrintTable..i1..": "..v1..", "
-                                        end
-                                end
-                        end
-                    end
-                end
-                end
-               
-                for i,v in pairs(Inventory) do
-                    for i1,v1 in pairs(v) do
-                        if v.Type == "Premium"  then
-                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" and i1 ~= "Value" and i1 ~= "Texture" then
-                                if i1 == "Name" then
-                                    PrintTable = PrintTable.."Premium "..i1..": "..v1..", "
-                                    else
-                                        if i1 == "SubType" then
-                                            PrintTable = PrintTable..i1..": "..v1.." | "
-                                            else
-                                            PrintTable = PrintTable..i1..": "..v1..", "
-                                        end
-                                end
-                        end
-                    end
-                end
-                end
-
-                for i,v in pairs(Inventory) do
-                    for i1,v1 in pairs(v) do
-                        if v.Type == "Scroll"  then
-                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" and i1 ~= "Value" and i1 ~= "Texture" then
-                                if i1 == "Name" then
-                                    PrintTable = PrintTable.."Scroll "..i1..": "..v1..", "
-                                    else
-                                        if i1 == "MaxCount" then
-                                            PrintTable = PrintTable..i1..": "..v1.." | "
-                                            else
-                                            PrintTable = PrintTable..i1..": "..v1..", "
-                                        end
-                                end
-                        end
-                    end
-                end
-                end
-
-                for i,v in pairs(Inventory) do
-                    for i1,v1 in pairs(v) do
-                        if v.Type == "Usable"  then
-                            if i1 ~= "Rarity" and i1 ~= "MasteryRequirements" and i1 ~= "Scrolls" and i1 ~= "Equipped" and i1 ~= "Type" and i1 ~= "Value" and i1 ~= "Texture" then
-                                if i1 == "Name" then
-                                    PrintTable = PrintTable.."Useable "..i1..": "..v1..", "
-                                    else
-                                        if i1 == "MaxCount" then
-                                            PrintTable = PrintTable..i1..": "..v1.." | "
-                                            else
-                                            PrintTable = PrintTable..i1..": "..v1..", "
-                                        end
-                                end
-                        end
-                    end
-                end
-                end
-                        
-    end)
-    end
----------------------
-
----Function Misc
-function FPS_BOOST()
-    setfpscap(500)
-    if game.ReplicatedStorage:FindFirstChild("Assets") then
-    game.ReplicatedStorage:FindFirstChild("Assets"):Destroy()
-    end
-    local decalsyeeted = true
-    local g = game
-    local w = g.Workspace
-    local l = g.Lighting
-    local t = w.Terrain
-    t.WaterWaveSize = 0
-    t.WaterWaveSpeed = 0
-    t.WaterReflectance = 0
-    t.WaterTransparency = 0
-    l.GlobalShadows = false
-    l.FogEnd = 9e9
-    l.Brightness = 0
-    settings().Rendering.QualityLevel = "Level01"
-    for i, v in pairs(g:GetDescendants()) do
-        if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then 
-            v.Material = "Plastic"
-            v.Reflectance = 0
-        elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
-            v.Transparency = 1
-        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-            v.Lifetime = NumberRange.new(0)
-        elseif v:IsA("Explosion") then
-            v.BlastPressure = 1
-            v.BlastRadius = 1
-        elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
-            v.Enabled = false
-        elseif v:IsA("MeshPart") then
-            v.Material = "Plastic"
-            v.Reflectance = 0
-            v.TextureID = 10385902758728957
-        end
-    end
-    for i, e in pairs(l:GetChildren()) do
-        if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
-            e.Enabled = false
-        end
-    end
-    _G.EnabledFpsBoost = true
-end
-if not _G.EnabledFpsBoost or _G.EnabledFpsBoost == false then
-FPS_BOOST()
-end
--- webhook func
-function SendWebhook1()
-    if SendPlayerDataAsWebhook then
-
-local data = {
-
-   ["content"] = "",
-   
-   ["avatar_url"] = "https://i.imgur.com/OBqZkBq.png",
-
-   ["embeds"] = {
-
-       {
-
-           ["title"] = 'Player Data Collected! '..tostring(os.date("[%X]")),
-
-           ["description"] = "__Player Info:__".."**\nName:  **"..Name.."\n **Level:  **"..Level.."\n**Bounty: **"..Bounty.."\n**Current Fruit:  **"..DevilFruit.."\n**Race:  **"..Race.."\n**Fragments:  **"..Fragments.."\n**Beli:  **"..Beli.."\n**Valor Level:  **"..Valor,
-
-           ["type"] = "rich",
-
-           ["color"] = tonumber(0x7269da),
-
-           ["thumbnail"] = {
-                ["url"] = "https://i.imgur.com/LOkRYqi.png"
-           },
-           ["fields"] = { -- Make a table
-				{ -- now make a new one for each field you wish to add
-					["name"] = PlayerCurrentMelee;
-					["value"] = "Mastery: "..PlayerCurrentMeleeLevel; -- The text,value or information under the title of the field aka name.
-					["inline"] = true; -- means that its either inline with others, from left to right or if it is set to false, from up to down.
-				},
-				{
-					["name"] = PlayerCurrentFruit;
-					["value"] = "Mastery: "..PlayerCurrentFruitLevel;
-					["inline"] = true;
-				},
-                {
-					["name"] = "";
-					["value"] = "";
-					["inline"] = true;
-				},
-                {
-					["name"] = PlayerCurrentSword;
-					["value"] = "Mastery: "..PlayerCurrentSwordLevel;
-					["inline"] = true;
-				},
-                {
-					["name"] = PlayerCurrentGun;
-					["value"] = "Mastery: "..PlayerCurrentGunLevel;
-					["inline"] = true;
-				}
-			},
-
-           ["footer"] = {
-                ["text"] = "Date: "..tostring(os.date("%d/%m/%Y"))
-           },
-
-       }
-
-   }
-
-}
-
-local newdata = game:GetService("HttpService"):JSONEncode(data)
-local headers = {
-
-   ["content-type"] = "application/json"
-
-}
-
-request = http_request or request or HttpPost or syn.request
-
-local abcdef = {Url = DiscordWebhookUrl, Body = newdata, Method = "POST", Headers = headers}
-
-request(abcdef)
-
-end
-end
-
-function SendWebhook2(msg)
-    Content = '';
-    Embed = {
-        title = msg;
-        color = tonumber(0xFF0000);
-        description = " ";
-    };
-    (syn and syn.request or http_request) {
-        Url = DiscordWebhookUrl;
-        Method = 'POST';
-        Headers = {
-            ['Content-Type'] = 'application/json';
-        };
-        Body = game:GetService'HttpService':JSONEncode( { content = Content; embeds = { Embed } } );
-    };
     end
 
-function SendDataJson()
-    if SendDataAsJson then
-        local Name = game.Players.LocalPlayer.Name.."_Data" .. ".json"
-        writefile(Name, game:GetService("HttpService"):JSONEncode(PrintTable))
-
-        local fileName = game.Players.LocalPlayer.Name.."_Data" .. ".json" -- Đặt tên tệp JSON của bạn
-        local fileData = readfile(fileName) -- Đọc nội dung tệp JSON
-        
-        -- URL avatar
-        local AvatarUrl = "https://i.imgur.com/OBqZkBq.png" -- Thay bằng URL avatar của bạn
-        
-        -- Tạo nội dung body của yêu cầu với multipart/form-data
-        local boundary = "------------------------" .. game:GetService("HttpService"):GenerateGUID(false)
-        local body = "--" .. boundary .. "\r\n"
-            .. "Content-Disposition: form-data; name=\"file\"; filename=\"" .. fileName .. "\"\r\n"
-            .. "Content-Type: application/json\r\n\r\n"
-            .. fileData .. "\r\n"
-            .. "--" .. boundary .. "\r\n"
-            .. "Content-Disposition: form-data; name=\"avatar_url\"\r\n\r\n"
-            .. AvatarUrl .. "\r\n"
-            .. "--" .. boundary .. "--"
-        
-        -- Định nghĩa headers
-        local headers = {
-            ["Content-Type"] = "multipart/form-data; boundary=" .. boundary,
-            ["Content-Length"] = tostring(#body),
-        }
-        
-        -- Gửi yêu cầu HTTP
-        local requestFunction = http_request or request or HttpPost or syn.request
-        if requestFunction then
-            local response = requestFunction({
-                Url = DiscordWebhookUrl, -- Thay trực tiếp URL webhook Discord tại đây
-                Method = "POST",
-                Headers = headers,
-                Body = body,
-            })
-        
-            -- Hiển thị phản hồi để kiểm tra lỗi hoặc thành công
-            if response then
-                if tonumber(response.StatusCode) < 400 then
-                print("Trạng thái: Successfully Excuted")
-                game:GetService'StarterGui':SetCore("SendNotification", {
-                    Title = "Shin dep trai", -- Notification title
-                    Text = "Sent Data Successfully", -- Notification text
-                    Icon = "https://i.imgur.com/LOkRYqi.png", -- Notification icon (optional)
-                    Duration = 5, -- Duration of the notification (optional, may be overridden if more than 3 notifs appear)
-                  })
-                else
-                print("Trạng thái: Webhook failed")
+    for i, v in ipairs(allfruitstock) do
+        if table.find(allplayerfruitname, v.Name) then -- if player fruit in fruitstock
+            for a,b in pairs(allplayerfruit) do
+                if b.Name == v.Name then
+                    table.insert(mixedTable, {Name = v.Name, Rarity = v.Rarity, Count = tostring(b.Count), Mastery = tostring(b.Mastery)})
                 end
-            else
-                print("Không nhận được phản hồi từ máy chủ.")
             end
         else
-            print("Không tìm thấy hàm gửi HTTP!")
+            table.insert(mixedTable,{Name = v.Name,  Rarity = v.Rarity, Count = "0", Mastery = "-"})
         end
+    end
+
+    return mixedTable
+end
+
+function getItem()
+
+    local function lietkeType()
+        local item_type = {}
+
+        for i,v in pairs(getInventory()) do -- Lay tat ca item type trong inv
+            if v.Type ~= "Blox Fruit" then
+                table.insert(item_type,v.Type) 
+            end
+        end
+
+        table.sort(item_type)
+        for i = #item_type, 2, -1 do -- Loại bỏ phần tử trùng lặp
+            if item_type[i] == item_type[i-1] then
+                table.remove(item_type, i)
+            end
+        end
+
+        return item_type
+    end
+
+    local item_table = {}
+        for i,v in pairs(lietkeType()) do -- {Gun,Material,Sword,Usable,Wear,..}
+            local typetable = string.sub(v, 1, 1):lower() .. string.sub(v,2).."s_info"
+            item_table[typetable] = {}
+
+            for a,b in pairs(getInventory()) do
+                if b.Type == v then
+                    for a1, b1 in pairs(b) do
+                        if a1 ~= "Rarity" and a1 ~= "MasteryRequirements" and a1 ~= "Scrolls" and a1 ~= "Equipped" and a1 ~= "Type" and a1 ~= "Value" and a1 ~= "Texture" then
+                                table.insert(item_table[typetable], {[a1] = b1})
+                        end
+                    end
+                end
+            end
+        end
+    return item_table
+end
+
+function checkEliteHunter()
+    if Sea == 3 then
+
+        local EliteHunterProcess = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("EliteHunter","Progress")
+        return EliteHunterProcess
+
+    else
+        return '`Không tìm thấy`'
     end
 end
 
+function checkSpy()
+    if Sea == 3 then
 
---Run Function
-SendWebhook1()
+        local Spy = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("InfoLeviathan",1)
+        if Spy == -1 then
+            return "Still in Cooldown"
+        else
+            return "Found Leviathan"
+        end
 
-if _G.AutoExecuteData["AutoExecute"] == false then
-getAllPlayerData()
-pasteDataToSend()
-SendDataJson()
-print('Sending Data, method: Non AutoExecute')
+    else
+        return '`Không tìm thấy`'
+    end
 end
------- Auto Execute 
-TimeSaveFileName = game.Players.LocalPlayer.Name.."_ServerTime"..".json"
 
-function readFile()
+function checkFile(filename)
     local success, result = pcall(function()
-        return game:GetService('HttpService'):JSONDecode(readfile(TimeSaveFileName))
+        return game:GetService('HttpService'):JSONDecode(readfile(Player.Name.. "_" ..filename.. ".json"))
     end)
     if success then
         return result
@@ -544,63 +257,72 @@ function readFile()
     end
 end
 
-function GetSavedTime() 
-    if readFile() ~= false then
-    return game:GetService('HttpService'):JSONDecode(readfile(TimeSaveFileName))
-    else
-    return false
-    end
+function createFile(filename,table)
+    writefile(Player.Name.. "_" ..filename.. ".json", game:GetService('HttpService'):JSONEncode(table))
 end
 
-function SaveTime(value)
-    writefile(TimeSaveFileName, game:GetService('HttpService'):JSONEncode(value))
-end
-
-game:GetService('Players').PlayerRemoving:Connect(function(player)
-    if player.Name == game:GetService('Players').LocalPlayer.Name then 
-            writefile(TimeSaveFileName, game:GetService('HttpService'):JSONEncode(CountingTime))
+function sendJson(filename,data)
+    createFile(filename,data)
+    local fileData = readfile(Player.Name.. "_" ..filename.. ".json")
+    -- URL avatar
+    local AvatarUrl = "https://i.imgur.com/OBqZkBq.png" -- Thay bằng URL avatar của bạn
+    
+    -- Tạo nội dung body của yêu cầu với multipart/form-data
+    local boundary = "------------------------" .. game:GetService("HttpService"):GenerateGUID(false)
+    local body = "--" .. boundary .. "\r\n"
+        .. "Content-Disposition: form-data; name=\"file\"; filename=\"" .. Player.Name.. "_" ..filename.. ".json" .. "\"\r\n"
+        .. "Content-Type: application/json\r\n\r\n"
+        .. fileData .. "\r\n"
+        .. "--" .. boundary .. "\r\n"
+        .. "Content-Disposition: form-data; name=\"avatar_url\"\r\n\r\n"
+        .. AvatarUrl .. "\r\n"
+        .. "--" .. boundary .. "--"
+    
+    -- Định nghĩa headers
+    local headers = {
+        ["Content-Type"] = "multipart/form-data; boundary=" .. boundary,
+        ["Content-Length"] = tostring(#body),
+    }
+    
+    -- Gửi yêu cầu HTTP
+    local requestFunction = http_request or request or HttpPost or syn.request
+    if requestFunction then
+        local response = requestFunction({
+            Url = DiscordWebhookUrl,
+            Method = "POST",
+            Headers = headers,
+            Body = body,
+        })
+    
+        -- Hiển thị phản hồi để kiểm tra lỗi hoặc thành công
+        if response then
+            if tonumber(response.StatusCode) < 400 then
+            print("Trạng thái: Successfully Excuted")
+            game:GetService'StarterGui':SetCore("SendNotification", {
+                Title = "Shin dep trai", -- Notification title
+                Text = "Sent Data Successfully", -- Notification text
+                Icon = "https://i.imgur.com/LOkRYqi.png", -- Notification icon (optional)
+                Duration = 5, -- Duration of the notification (optional, may be overridden if more than 3 notifs appear)
+                })
+            else
+            print("Trạng thái: Webhook failed")
+            end
+        else
+            print("Không nhận được phản hồi từ máy chủ.")
         end
-end)
-CountingTime = 0
-ExecutedScriptTime = math.floor(workspace.DistributedGameTime+0.5)
-
-
-if ExecutedScriptTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] and _G.AutoExecuteData["AutoExecute"] == true then
-    print('Sending Data, method: Servertime reached NotifyTime ')
-    getAllPlayerData()
-    pasteDataToSend()
-    SendDataJson()
-end
-
-while _G.AutoExecuteData["AutoExecute"] do
-    wait(1)
-    local getSavedTimeStatus = GetSavedTime()
-    local CurrentGameTime = math.floor(workspace.DistributedGameTime+0.5)
-
-    if getSavedTimeStatus == false then
-
-    CountingTime = ( CurrentGameTime ) - ( (_G.AutoExecuteData["NotifyTime"]) * ( CurrentGameTime // (_G.AutoExecuteData["NotifyTime"])  )  )
-    print("Current Time1: "..CountingTime.." (".." 0 Saved Time)".." + ".."("..CurrentGameTime.." Server Time)")
-
-    if CountingTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] then
-        print('Sending Data, method: no save file')
-        getAllPlayerData()
-        pasteDataToSend()
-        SendDataJson()
-    end
     else
-
-    CountingTime = CurrentGameTime - ExecutedScriptTime + getSavedTimeStatus
-    print("Current Time2: "..CountingTime.." ("..GetSavedTime().." Saved Time)".." + ".."("..CurrentGameTime.." Server Time)")
-
-    if CountingTime + 1.3 >= _G.AutoExecuteData["NotifyTime"] then
-        print('Sending Data, method: saved file')
-        getAllPlayerData()
-        pasteDataToSend()
-        SendDataJson()
-        SaveTime(0)
-        CountingTime = 0
-        ExecutedScriptTime = CurrentGameTime
+        print("Không tìm thấy hàm gửi HTTP!")
     end
 end
-end
+
+-- function AutoExecute()
+--     if _G.AutoExecuteData["AutoExecute"] then
+--         if not checkFile("Time") then
+--     local savedTime
+--             while _G.AutoExecuteData["AutoExecute"] do
+                    
+--                 end
+--             end
+-- end
+
+sendJson("Data",getData())
