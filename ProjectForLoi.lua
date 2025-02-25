@@ -297,7 +297,7 @@ function sendJson(filename,data)
     local requestFunction = http_request or request or HttpPost
     if requestFunction then
         local response = requestFunction({
-            Url = "DiscordWebhookUrl",
+            Url = DiscordWebhookUrl,
             Method = "POST",
             Headers = headers,
             Body = body,
@@ -326,15 +326,14 @@ end
 
 game:GetService('Players').PlayerRemoving:Connect(function(player) -- Save Time when player leave
     if player.Name == game:GetService('Players').LocalPlayer.Name and _G.AutoExecuteData["AutoExecute"] then 
-           fileCreate("Time",math.floor(time()+0.5))
+           fileCreate("Time",PassedTime)
         end
 end)
 
 function Notify()
     if not _G.AutoExecuteData["AutoExecute"] then
-        sendJson("Data",getData())
         print('Sending Data, method: Non AutoExecute')
-
+        sendJson("Data",getData())
     else
         local ExecutedTime = os.time()
         local SavedTime = 0
@@ -345,7 +344,7 @@ function Notify()
 
         if not fileCheck("Time") then -- Check saved time
             fileCreate("Time", 0)
-            print('does not have "Time" file')
+            print('does not have Time file')
         else
             SavedTime = fileGet("Time")
             print("archieved SavedTime "..SavedTime)
@@ -353,10 +352,11 @@ function Notify()
 
         while _G.AutoExecuteData["AutoExecute"] do
                 local CurrentTime = os.time()
-                local PassedTime = CurrentTime - ExecutedTime + SavedTime
+                PassedTime = CurrentTime - ExecutedTime + SavedTime
                 print(PassedTime)
                 if PassedTime >= _G.AutoExecuteData["NotifyTime"] then
                     print("Sending Data, Method: AutoExecute(PassedTime reached NotifyTime)")
+                    sendJson("Data",getData())
                     ExecutedTime = os.time()
                     SavedTime = 0
                 end
