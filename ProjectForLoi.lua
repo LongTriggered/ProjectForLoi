@@ -21,27 +21,31 @@ function getCharacter()
 end
 
 function getData()
-    return  {
+    local datachinh = {
         data = {
                 player_info = {
-                    ["Player Name"]       = Player.Name,
-                    ["Level"]      = tostring(Player.Data.Level.Value),
-                    ["Bounty"]     = tostring(Player.leaderstats['Bounty/Honor'].Value),
-                    ["Race"]       = tostring(Player.Data.Race.Value..getRaceLevel()),
-                    ["Fragments"]   = tostring(Player.Data.Fragments.Value),
-                    ["Beli"]       = tostring(Player.Data.Beli.Value),
-                    ["Valor Level"]     = tostring(Player.Data.Valor.Value),
-                    ["Fruit Capacity"]   = tostring(Player.Data.FruitCap.Value),
-                    ["Total Killed Elite Hunter"] = tostring(checkEliteHunter()),
-                    ["Spy"] = tostring(checkSpy()),
-                    ["Combo"] = getCombo()
+                    ["Player Name"]                 = Player.Name,
+                    ["Level"]                       = tostring(Player.Data.Level.Value),
+                    ["Bounty"]                      = tostring(Player.leaderstats['Bounty/Honor'].Value),
+                    ["Race"]                        = tostring(Player.Data.Race.Value..getRaceLevel()),
+                    ["Fragments"]                   = tostring(Player.Data.Fragments.Value),
+                    ["Beli"]                        = tostring(Player.Data.Beli.Value),
+                    ["Valor Level"]                 = tostring(Player.Data.Valor.Value),
+                    ["Fruit Capacity"]              = tostring(Player.Data.FruitCap.Value),
+                    ["Total Killed Elite Hunter"]   = tostring(checkEliteHunter()),
+                    ["Spy"]                         = tostring(checkSpy()),
+                    ["Combo"]                       = getCombo()
                             },
                 melees_info = getAllMelee(),
-                items_info  = getItem(),
                 fruits_info = getFruitInventory(),
                 time        = os.time()
                 }     
             }
+    for i,v in pairs(getItemType()) do -- for items_info
+        local rename_to_s_info = string.sub(v, 1, 1):lower() .. string.sub(v,2).."s_info"
+            datachinh.data[rename_to_s_info] = getItem()[v]
+    end
+    return datachinh
 end
 
 function getRaceLevel()
@@ -94,7 +98,7 @@ function getCombo()
         if v:IsA("Tool") then
             if v.ToolTip == "Melee" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Sword" or v.ToolTip == "Gun" then
                 ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Name =  v.Name
-                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Mastery =  tostring(Player.Backpack[v.Name].Level.Value)
+                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Mastery = tostring(Player.Backpack[v.Name].Level.Value)
             end
         end
     end
@@ -103,7 +107,7 @@ function getCombo()
         if v:IsA("Tool") then
             if v.ToolTip == "Melee" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Sword" or v.ToolTip == "Gun" then
                 ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Name =  v.Name
-                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Mastery =  tostring(Player.Backpack[v.Name].Level.Value)
+                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Mastery = tostring(getCharacter()[v.Name].Level.Value)
             end
         end
     end
@@ -182,37 +186,37 @@ function getFruitInventory()
     return mixedTable
 end
 
-function getItem()
+function getItemType()
+    local item_type = {}
 
-    local function lietkeType()
-        local item_type = {}
-
-        for i,v in pairs(getInventory()) do -- Lay tat ca item type trong inv
-            if v.Type ~= "Blox Fruit" then
-                table.insert(item_type,v.Type) 
-            end
+    for i,v in pairs(getInventory()) do -- Lay tat ca item type trong inv
+        if v.Type ~= "Blox Fruit" then
+            table.insert(item_type,v.Type) 
         end
-
-        table.sort(item_type)
-        for i = #item_type, 2, -1 do -- Loại bỏ phần tử trùng lặp
-            if item_type[i] == item_type[i-1] then
-                table.remove(item_type, i)
-            end
-        end
-
-        return item_type
     end
 
+    table.sort(item_type)
+    for i = #item_type, 2, -1 do -- Loại bỏ phần tử trùng lặp
+        if item_type[i] == item_type[i-1] then
+            table.remove(item_type, i)
+        end
+    end
+
+    return item_type
+end
+
+function getItem()
+
     local item_table = {}
-        for i,v in pairs(lietkeType()) do -- {Gun,Material,Sword,Usable,Wear,..}
-            local typetable = string.sub(v, 1, 1):lower() .. string.sub(v,2).."s_info"
-            item_table[typetable] = {}
+        for i,v in pairs(getItemType()) do -- {Gun,Material,Sword,Usable,Wear,..}
+            -- local typetable = string.sub(v, 1, 1):lower() .. string.sub(v,2).."s_info"
+            item_table[v] = {}
 
             for a,b in pairs(getInventory()) do
                 if b.Type == v then
                     for a1, b1 in pairs(b) do
                         if a1 ~= "Rarity" and a1 ~= "MasteryRequirements" and a1 ~= "Scrolls" and a1 ~= "Equipped" and a1 ~= "Type" and a1 ~= "Value" and a1 ~= "Texture" then
-                                table.insert(item_table[typetable], {[a1] = b1})
+                                table.insert(item_table[v], {[a1] = b1})
                         end
                     end
                 end
@@ -247,22 +251,27 @@ function checkSpy()
     end
 end
 
-function checkFile(filename)
+function fileCheck(filename)
     local success, result = pcall(function()
         return game:GetService('HttpService'):JSONDecode(readfile(Player.Name.. "_" ..filename.. ".json"))
     end)
     if success then
-        return result
-    else return false
+        print('co file '..filename)
+        return true
+    else print('deo co file '..filename) return false
     end
 end
 
-function createFile(filename,table)
+function fileCreate(filename,table)
     writefile(Player.Name.. "_" ..filename.. ".json", game:GetService('HttpService'):JSONEncode(table))
 end
 
+function fileGet(filename)
+    return game:GetService('HttpService'):JSONDecode(readfile(Player.Name.. "_" ..filename.. ".json"))
+end
+
 function sendJson(filename,data)
-    createFile(filename,data)
+    fileCreate(filename,data)
     local fileData = readfile(Player.Name.. "_" ..filename.. ".json")
     -- URL avatar
     local AvatarUrl = "https://i.imgur.com/OBqZkBq.png" -- Thay bằng URL avatar của bạn
@@ -285,10 +294,10 @@ function sendJson(filename,data)
     }
     
     -- Gửi yêu cầu HTTP
-    local requestFunction = http_request or request or HttpPost or syn.request
+    local requestFunction = http_request or request or HttpPost
     if requestFunction then
         local response = requestFunction({
-            Url = DiscordWebhookUrl,
+            Url = "DiscordWebhookUrl",
             Method = "POST",
             Headers = headers,
             Body = body,
@@ -315,14 +324,45 @@ function sendJson(filename,data)
     end
 end
 
--- function AutoExecute()
---     if _G.AutoExecuteData["AutoExecute"] then
---         if not checkFile("Time") then
---     local savedTime
---             while _G.AutoExecuteData["AutoExecute"] do
-                    
---                 end
---             end
--- end
+game:GetService('Players').PlayerRemoving:Connect(function(player) -- Save Time when player leave
+    if player.Name == game:GetService('Players').LocalPlayer.Name and _G.AutoExecuteData["AutoExecute"] then 
+           fileCreate("Time",math.floor(time()+0.5))
+        end
+end)
 
-sendJson("Data",getData())
+function Notify()
+    if not _G.AutoExecuteData["AutoExecute"] then
+        sendJson("Data",getData())
+        print('Sending Data, method: Non AutoExecute')
+
+    else
+        local ExecutedTime = os.time()
+        local SavedTime = 0
+
+        -- if ExecutedTime == _G.AutoExecuteData["NotifyTime"] then
+        --     print('Sending Data, Method: AutoExecute("Server time reached NotifyTime)')
+        -- end
+
+        if not fileCheck("Time") then -- Check saved time
+            fileCreate("Time", 0)
+            print('does not have "Time" file')
+        else
+            SavedTime = fileGet("Time")
+            print("archieved SavedTime "..SavedTime)
+        end
+
+        while _G.AutoExecuteData["AutoExecute"] do
+                local CurrentTime = os.time()
+                local PassedTime = CurrentTime - ExecutedTime + SavedTime
+                print(PassedTime)
+                if PassedTime >= _G.AutoExecuteData["NotifyTime"] then
+                    print("Sending Data, Method: AutoExecute(PassedTime reached NotifyTime)")
+                    ExecutedTime = os.time()
+                    SavedTime = 0
+                end
+                task.wait(1)
+            end
+        end
+    end
+
+Notify()
