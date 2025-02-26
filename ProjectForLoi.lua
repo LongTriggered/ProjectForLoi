@@ -212,13 +212,13 @@ function getItem()
             item_table[v] = {}
             for a,b in pairs(getInventory()) do
                 if b.Type == v then
-                    itemnametable = {}
+                    local item_datatable = {}
                     for a1, b1 in pairs(b) do
                         if a1 ~= "Rarity" and a1 ~= "MasteryRequirements" and a1 ~= "Scrolls" and a1 ~= "Equipped" and a1 ~= "Type" and a1 ~= "Value" and a1 ~= "Texture" then
-                            itemnametable[a1] = b1
+                                item_datatable[a1] = b1
                         end
                     end
-                    table.insert(item_table[v], itemnametable)
+                    table.insert(item_table[v], item_datatable)
                 end
             end
         end
@@ -364,5 +364,5 @@ function Notify()
             end
         end
     end
-print('ga')
+
 Notify()
