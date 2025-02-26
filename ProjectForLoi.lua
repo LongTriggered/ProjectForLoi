@@ -377,6 +377,8 @@ function Notify()
 
 for i,v in pairs(getItem()) do
     for a,b in pairs(v) do
-        print(a,b)
+		for c,d in pairs(b) do
+			print(c,d)
+		end
     end
 end
