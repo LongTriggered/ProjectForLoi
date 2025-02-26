@@ -234,7 +234,7 @@ function getItem()
                 end
             end
         end
-    return AlternativeInventory
+    return item_table
 end
 
 function checkEliteHunter()
