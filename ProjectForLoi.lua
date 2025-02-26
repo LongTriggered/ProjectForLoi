@@ -379,5 +379,6 @@ for i,v in pairs(getItem()) do
 	for a,b in pairs(v) do
 		print(a,b)
 	end
+	print("-----------")
 end
 print('2')
