@@ -208,17 +208,17 @@ end
 function getItem()
     local AlternativeInventory = {}
     for i,v in pairs(getInventory()) do
-        AlternativeInventory[v] = {}
+        AlternativeInventory[v.Name] = {}
            for a,b in pairs(v) do
                 if a ~= "Rarity" and a ~= "MasteryRequirements" and a ~= "Scrolls" and a ~= "Equipped" and a ~= "Type" and a ~= "Value" and a ~= "Texture" then
-                    table.insert(AlternativeInventory[v],{a,b})
+                    table.insert(AlternativeInventory[v.Name],{a,b})
                 end
            end
     end
     local item_table = {}
         for i,v in pairs(getItemType()) do -- {Gun,Material,Sword,Usable,Wear,..}
             item_table[v] = {}
-            for a,b in pairs(getInventory()) do
+            for a,b in pairs(AlternativeInventory()) do
                 if b.Type == v then
                     table.insert(item_table[v], b)
                 end
@@ -232,7 +232,7 @@ function getItem()
             --         end
             --     end
         end
-    return AlternativeInventory
+    return item_table
 end
 
 function checkEliteHunter()
@@ -375,8 +375,4 @@ function Notify()
         end
     end
 
-a = getItem()
-
-for i,v in pairs(a) do
-    print(i)
-end
+Notify()
