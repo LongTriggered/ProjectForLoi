@@ -370,4 +370,4 @@ function Notify()
         end
     end
 
-print(getItem())
+print(unpack(getItem()))
