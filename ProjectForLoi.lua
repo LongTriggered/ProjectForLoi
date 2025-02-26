@@ -207,11 +207,16 @@ end
 
 function getItem()
 
+    local AlternativeInventory = {}
+    for i,v in pairs(getInventory()) do
+        AlternativeInventory[v.Name] = {}
+    end
+
+
     local item_table = {}
         for i,v in pairs(getItemType()) do -- {Gun,Material,Sword,Usable,Wear,..}
             -- local typetable = string.sub(v, 1, 1):lower() .. string.sub(v,2).."s_info"
             item_table[v] = {}
-
             for a,b in pairs(getInventory()) do
                 if b.Type == v then
                     for a1, b1 in pairs(b) do
@@ -222,7 +227,7 @@ function getItem()
                 end
             end
         end
-    return item_table
+    return AlternativeInventory
 end
 
 function checkEliteHunter()
@@ -365,4 +370,4 @@ function Notify()
         end
     end
 
-Notify()
+print(getItem())
