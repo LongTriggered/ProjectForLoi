@@ -232,7 +232,7 @@ function getItem()
             --         end
             --     end
         end
-    return item_table
+    return AlternativeInventory
 end
 
 function checkEliteHunter()
@@ -375,4 +375,8 @@ function Notify()
         end
     end
 
-Notify()
+a = getItem()
+
+for i,v in pairs(a) do
+    print(i,v)
+end
