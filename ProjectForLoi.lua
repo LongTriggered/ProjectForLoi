@@ -206,19 +206,17 @@ function getItemType()
 end
 
 function getItem()
-    local ItemType = getItemType()
-
     local AlternativeInventory = {}
     for i,v in pairs(getInventory()) do
-        AlternativeInventory[v.Name] = {}
+        AlternativeInventory[v] = {}
            for a,b in pairs(v) do
                 if a ~= "Rarity" and a ~= "MasteryRequirements" and a ~= "Scrolls" and a ~= "Equipped" and a ~= "Type" and a ~= "Value" and a ~= "Texture" then
-                    table.insert(AlternativeInventory[v.Name],{a,b})
+                    table.insert(AlternativeInventory[v],{a,b})
                 end
            end
     end
     local item_table = {}
-        for i,v in pairs(ItemType) do -- {Gun,Material,Sword,Usable,Wear,..}
+        for i,v in pairs(getItemType()) do -- {Gun,Material,Sword,Usable,Wear,..}
             item_table[v] = {}
             for a,b in pairs(AlternativeInventory) do
                 if b.Type == v then
