@@ -218,7 +218,7 @@ function getItem()
     local item_table = {}
         for i,v in pairs(getItemType()) do -- {Gun,Material,Sword,Usable,Wear,..}
             item_table[v] = {}
-            for a,b in pairs(AlternativeInventory()) do
+            for a,b in pairs(AlternativeInventory) do
                 if b.Type == v then
                     table.insert(item_table[v], b)
                 end
