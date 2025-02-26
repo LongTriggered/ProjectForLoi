@@ -23,22 +23,7 @@ end
 function getData()
     local datachinh = {
         data = {
-                player_info = {
-                    ["Player Name"]                 = Player.Name,
-                    ["Level"]                       = tostring(Player.Data.Level.Value),
-                    ["Bounty"]                      = tostring(Player.leaderstats['Bounty/Honor'].Value),
-                    ["Race"]                        = tostring(Player.Data.Race.Value..getRaceLevel()),
-                    ["Fragments"]                   = tostring(Player.Data.Fragments.Value),
-                    ["Beli"]                        = tostring(Player.Data.Beli.Value),
-                    ["Valor Level"]                 = tostring(Player.Data.Valor.Value),
-                    ["Fruit Capacity"]              = tostring(Player.Data.FruitCap.Value),
-                    ["Total Killed Elite Hunter"]   = tostring(checkEliteHunter()),
-                    ["Spy"]                         = tostring(checkSpy()),
-                    ["Combo"]                       = getCombo()
-                            },
-                melees_info = getAllMelee(),
-                fruits_info = getFruitInventory(),
-                time        = os.time()
+              
                 }     
             }
     for i,v in pairs(getItemType()) do -- for items_info
