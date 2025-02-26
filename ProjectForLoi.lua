@@ -215,8 +215,7 @@ function getItem()
                 if b.Type == v then
                     for a1, b1 in pairs(b) do
                         if a1 ~= "Rarity" and a1 ~= "MasteryRequirements" and a1 ~= "Scrolls" and a1 ~= "Equipped" and a1 ~= "Type" and a1 ~= "Value" and a1 ~= "Texture" then
-                            itemnametable[a1] = b1
-                                table.insert(item_table[v], itemnametable)
+                            item_table[v][itemnametable][a1] = b1
                         end
                     end
                 end
@@ -364,5 +363,5 @@ function Notify()
             end
         end
     end
-print('changed2')
+print('ac')
 Notify()
