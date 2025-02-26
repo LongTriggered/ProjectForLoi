@@ -211,7 +211,7 @@ function getItem()
         AlternativeInventory[v.Name] = {}
            for a,b in pairs(v) do
                 if a ~= "Rarity" and a ~= "MasteryRequirements" and a ~= "Scrolls" and a ~= "Equipped" and a ~= "Type" and a ~= "Value" and a ~= "Texture" then
-                    table.insert(AlternativeInventory[v.Name],{a,b})
+                    AlternativeInventory[v.Name][a] = b
                 end
            end
     end
