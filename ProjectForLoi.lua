@@ -211,12 +211,12 @@ function getItem()
         for i,v in pairs(getItemType()) do -- {Gun,Material,Sword,Usable,Wear,..}
             -- local typetable = string.sub(v, 1, 1):lower() .. string.sub(v,2).."s_info"
             item_table[v] = {}
-
             for a,b in pairs(getInventory()) do
                 if b.Type == v then
+                    item_table[v][b] = {}
                     for a1, b1 in pairs(b) do
                         if a1 ~= "Rarity" and a1 ~= "MasteryRequirements" and a1 ~= "Scrolls" and a1 ~= "Equipped" and a1 ~= "Type" and a1 ~= "Value" and a1 ~= "Texture" then
-                                table.insert(item_table[v], {a1,b1})
+                                table.insert(item_table[v][b], a,b)
                         end
                     end
                 end
