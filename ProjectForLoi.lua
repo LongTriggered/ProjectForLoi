@@ -23,7 +23,22 @@ end
 function getData()
     local datachinh = {
         data = {
-              
+                player_info = {
+                    ["Player Name"]                 = Player.Name,
+                    ["Level"]                       = tostring(Player.Data.Level.Value),
+                    ["Bounty"]                      = tostring(Player.leaderstats['Bounty/Honor'].Value),
+                    ["Race"]                        = tostring(Player.Data.Race.Value..getRaceLevel()),
+                    ["Fragments"]                   = tostring(Player.Data.Fragments.Value),
+                    ["Beli"]                        = tostring(Player.Data.Beli.Value),
+                    ["Valor Level"]                 = tostring(Player.Data.Valor.Value),
+                    ["Fruit Capacity"]              = tostring(Player.Data.FruitCap.Value),
+                    ["Total Killed Elite Hunter"]   = tostring(checkEliteHunter()),
+                    ["Spy"]                         = tostring(checkSpy()),
+                    ["Combo"]                       = getCombo()
+                            },
+                melees_info = getAllMelee(),
+                fruits_info = getFruitInventory(),
+                time        = os.time()
                 }     
             }
     for i,v in pairs(getItemType()) do -- for items_info
@@ -194,15 +209,14 @@ function getItem()
 
     local item_table = {}
         for i,v in pairs(getItemType()) do -- {Gun,Material,Sword,Usable,Wear,..}
-            -- local typetable = string.sub(v, 1, 1):lower() .. string.sub(v,2).."s_info"
             item_table[v] = {}
             for a,b in pairs(getInventory()) do
-                itemnametable[b.Name] = {}
+                itemnametable = {}
                 if b.Type == v then
                     for a1, b1 in pairs(b) do
                         if a1 ~= "Rarity" and a1 ~= "MasteryRequirements" and a1 ~= "Scrolls" and a1 ~= "Equipped" and a1 ~= "Type" and a1 ~= "Value" and a1 ~= "Texture" then
-                            itemnametable[b.Name][a1] = b1
-                                table.insert(item_table[v], itemnametable[b.Name])
+                            itemnametable[a1] = b1
+                                table.insert(item_table[v], itemnametable)
                         end
                     end
                 end
@@ -350,5 +364,5 @@ function Notify()
             end
         end
     end
-print('changed')
+print('changed2')
 Notify()
