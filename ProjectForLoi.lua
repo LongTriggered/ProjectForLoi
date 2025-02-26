@@ -364,5 +364,5 @@ function Notify()
             end
         end
     end
-print('ye')
+
 Notify()
