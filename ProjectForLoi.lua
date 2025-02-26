@@ -209,11 +209,13 @@ function getItem()
 
     local AlternativeInventory = {}
     for i,v in pairs(getInventory()) do
+        if v.Type ~= "Blox Fruit" then
         AlternativeInventory[v.Name] = {}
         for a,b in pairs(v) do
             if a ~= "Rarity" and a ~= "MasteryRequirements" and a ~= "Scrolls" and a ~= "Equipped" and a ~= "Type" and a ~= "Value" and a ~= "Texture" then
                 AlternativeInventory[v.Name][a] = b
             end
+        end
         end
     end
 
@@ -381,4 +383,4 @@ for i,v in pairs(getItem()) do
 	end
 	print("-----------")
 end
-print('2')
+print('3')
