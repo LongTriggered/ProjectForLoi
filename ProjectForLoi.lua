@@ -370,4 +370,6 @@ function Notify()
         end
     end
 
-print(unpack(getItem()))
+for i,v in pairs(getItem()) do
+print(v)
+end
