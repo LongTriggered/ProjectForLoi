@@ -211,12 +211,12 @@ function getItem()
         for i,v in pairs(getItemType()) do -- {Gun,Material,Sword,Usable,Wear,..}
             item_table[v] = {}
             for a,b in pairs(getInventory()) do
-                itemnametable[b.Name] = {}
+                itemnametable = {}
                 if b.Type == v then
                     for a1, b1 in pairs(b) do
                         if a1 ~= "Rarity" and a1 ~= "MasteryRequirements" and a1 ~= "Scrolls" and a1 ~= "Equipped" and a1 ~= "Type" and a1 ~= "Value" and a1 ~= "Texture" then
-                            itemnametable[b.Name][a1] = b1
-                                table.insert(item_table[v], itemnametable[b.Name])
+                            itemnametable[a1] = b1
+                                table.insert(item_table[v], itemnametable)
                         end
                     end
                 end
