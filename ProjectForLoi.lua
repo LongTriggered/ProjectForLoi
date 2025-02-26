@@ -191,30 +191,18 @@ function getItemType()
 end
 
 function getItem()
-    function ago()
-    local AlternativeInventory = {}
-    for i,v in pairs(getInventory()) do
-        if v.Type ~= "Blox Fruit" then
-        AlternativeInventory[v.Name] = {}
-        for a,b in pairs(v) do
-            if a ~= "Rarity" and a ~= "MasteryRequirements" and a ~= "Scrolls" and a ~= "Equipped" and a ~= "Type" and a ~= "Value" and a ~= "Texture" then
-                AlternativeInventory[v.Name][a] = b
-            end
-        end
-        end
-    end
-    return AlternativeInventory
-end
 
     local item_table = {}
         for i,v in pairs(getItemType()) do -- {Gun,Material,Sword,Usable,Wear,..}
             -- local typetable = string.sub(v, 1, 1):lower() .. string.sub(v,2).."s_info"
             item_table[v] = {}
-            for a,b in pairs(ago()) do
+            for a,b in pairs(getInventory()) do
+                itemnametable[b.Name] = {}
                 if b.Type == v then
                     for a1, b1 in pairs(b) do
                         if a1 ~= "Rarity" and a1 ~= "MasteryRequirements" and a1 ~= "Scrolls" and a1 ~= "Equipped" and a1 ~= "Type" and a1 ~= "Value" and a1 ~= "Texture" then
-                                table.insert(item_table[v], b)
+                            itemnametable[b.Name][a1] = b1
+                                table.insert(item_table[v], itemnametable[b.Name])
                         end
                     end
                 end
@@ -362,6 +350,5 @@ function Notify()
             end
         end
     end
-
+print('changed')
 Notify()
-print('2')
