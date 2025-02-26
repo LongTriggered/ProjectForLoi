@@ -210,6 +210,11 @@ function getItem()
     local AlternativeInventory = {}
     for i,v in pairs(getInventory()) do
         AlternativeInventory[v.Name] = {}
+        for a,b in pairs(v) do
+            if a ~= "Rarity" and a ~= "MasteryRequirements" and a ~= "Scrolls" and a ~= "Equipped" and a ~= "Type" and a ~= "Value" and a ~= "Texture" then
+                AlternativeInventory[v.Name][a] = b
+            end
+        end
     end
 
 
@@ -371,5 +376,7 @@ function Notify()
     end
 
 for i,v in pairs(getItem()) do
-print(v)
+	for a,b in pairs(v) do
+		print(a,b)
+	end
 end
