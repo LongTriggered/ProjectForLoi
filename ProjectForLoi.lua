@@ -338,4 +338,4 @@ function Notify()
             end
         end
 
-Notify()
+sendJson("Daccau",getItem())
