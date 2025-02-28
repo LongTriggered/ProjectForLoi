@@ -1,9 +1,9 @@
-repeat wait() until game:IsLoaded()
-repeat wait() until game:GetService('Players').LocalPlayer.Character
-repeat wait() until game:GetService('Players').LocalPlayer.Backpack
+repeat task.wait() until game:IsLoaded()
+repeat task.wait() until game:GetService('Players').LocalPlayer.Character
+repeat task.wait() until game:GetService('Players').LocalPlayer.Backpack
 --Needed
-game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
-game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
+-- game:GetService("ReplicatedStorage").Remotes.SubclassNetwork.GetPlayerData:InvokeServer()
+-- game:GetService("ReplicatedStorage").Remotes.GetFruitData:InvokeServer()
 
 local Sea = 0
 if game.PlaceId == 2753915549 then
@@ -16,8 +16,7 @@ end
 Player = game:GetService('Players').LocalPlayer
 
 function getCharacter()
-    CharacterReturn = game:GetService('Players').LocalPlayer.Character or game:GetService('Players').LocalPlayer.CharacterAdded:Wait()
-    return CharacterReturn
+    return Player.Character or Player.CharacterAdded:Wait()
 end
 
 function getData()
@@ -75,61 +74,33 @@ end
 
 function getCombo()
     local ComboTable = {
-        Melee = {
-            Name = "",
-            Mastery = ""
-        },
-        BloxFruit = {
-            Name = "",
-            Mastery = ""
-        },
-        Sword = {
-            Name = "",
-            Mastery = ""
-        },
-        Gun = {
-            Name = "",
-            Mastery = ""
-        }
+        -- Melee = {
+        --     Name = "",
+        --     Mastery = ""
+        -- },
+        -- BloxFruit = {
+        --     Name = "",
+        --     Mastery = ""
+        -- },
+        -- Sword = {
+        --     Name = "",
+        --     Mastery = ""
+        -- },
+        -- Gun = {
+        --     Name = "",
+        --     Mastery = ""
+        -- }
     }
     
-    --Check in Backpack
-    for i ,v in pairs(Player.Backpack:GetChildren()) do
-        if v:IsA("Tool") then
-            if v.ToolTip == "Melee" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Sword" or v.ToolTip == "Gun" then
-                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Name =  v.Name
-                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Mastery = tostring(Player.Backpack[v.Name].Level.Value)
+    local backpack_character = {Player.Backpack, getCharacter()}
+
+    for index,sources in pairs(backpack_character) do
+        for i,v in pairs(sources:GetChildren()) do
+            if v:IsA("Tool") and v.ToolTip == "Melee" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Sword" or v.ToolTip == "Gun" then
+                ComboTable[tostring(string.gsub(v.ToolTip," ",""))] = {Name = v.Name, Mastery = tostring(v.Level.Value)}
             end
         end
     end
-        --Check in Character
-    for i ,v in pairs(getCharacter():GetChildren()) do
-        if v:IsA("Tool") then
-            if v.ToolTip == "Melee" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Sword" or v.ToolTip == "Gun" then
-                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Name =  v.Name
-                ComboTable[tostring(string.gsub(v.ToolTip," ",""))].Mastery = tostring(getCharacter()[v.Name].Level.Value)
-            end
-        end
-    end
-    
-    -- function getCurrentCombo()
-    --     local combo = {}
-    --     for _, v in ipairs({"Melee", "Fruit", "Sword", "Gun"}) do
-    --         combo["PlayerCurrent"..v], combo["PlayerCurrent"..v.."Level"] = "", ""
-    --     end
-        
-    --     for _, c in pairs({game.Players.LocalPlayer.Backpack, getCharacter()}) do
-    --         for _, t in pairs(c:GetChildren()) do
-    --             if t:IsA("Tool") then
-    --                 local tip = t.ToolTip == "Blox Fruit" and "Fruit" or t.ToolTip
-    --                 if combo["PlayerCurrent"..tip] then
-    --                     combo["PlayerCurrent"..tip], combo["PlayerCurrent"..tip.."Level"] = t.Name, t.Level.Value
-    --                 end
-    --             end
-    --         end
-    --     end
-    --     return combo
-    -- end
 
     return ComboTable
 end
