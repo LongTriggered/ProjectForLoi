@@ -96,8 +96,10 @@ function getCombo()
 
     for index,sources in pairs(backpack_character) do
         for i,v in pairs(sources:GetChildren()) do
-            if v:IsA("Tool") and v.ToolTip == "Melee" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Sword" or v.ToolTip == "Gun" then
-                ComboTable[tostring(string.gsub(v.ToolTip," ",""))] = {Name = v.Name, Mastery = tostring(v.Level.Value)}
+            if v:IsA("Tool") then
+                if v.ToolTip == "Melee" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Sword" or v.ToolTip == "Gun" then
+                    ComboTable[tostring(string.gsub(v.ToolTip," ",""))] = {Name = v.Name, Mastery = tostring(v.Level.Value)}
+                end
             end
         end
     end
@@ -304,8 +306,9 @@ end)
 function Notify()
     if not _G.AutoExecuteData["AutoExecute"] then
         print('Sending Data, method: Non AutoExecute')
-        sendJson("Data",getData())
-    else
+        return sendJson("Data",getData())
+    end
+    
         local ExecutedTime = os.time()
         local SavedTime = 0
 
@@ -334,6 +337,5 @@ function Notify()
                 task.wait(1)
             end
         end
-    end
-print('22')
+
 Notify()
