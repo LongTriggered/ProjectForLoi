@@ -37,12 +37,13 @@ function getData()
                             },
                 melees_info = getAllMelee(),
                 fruits_info = getFruitInventory(),
-                time        = os.time()
+                time        = os.time(),
+                inventory_info = {}
                 }     
             }
     for i,v in pairs(getItemType()) do -- for items_info
         local rename_to_s_info = string.sub(v, 1, 1):lower() .. string.sub(v,2).."s_info"
-            datachinh.data[rename_to_s_info] = getItem()[v]
+            datachinh.data.inventory_info[rename_to_s_info] = getItem()[v]
     end
     return datachinh
 end
